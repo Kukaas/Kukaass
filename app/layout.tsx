@@ -14,6 +14,11 @@ export const metadata: Metadata = {
   keywords: ["full-stack developer", "MERN stack", "Laravel", "web development", "portfolio"],
   authors: [{ name: "Chester Luke A. Maligaso" }],
   creator: "Chester Luke A. Maligaso",
+  icons: {
+    icon: '/logo.jpeg',
+    shortcut: '/logo.jpeg',
+    apple: '/logo.jpeg',
+  },
 };
 
 export default function RootLayout({
