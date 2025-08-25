@@ -42,7 +42,7 @@ export default function Navbar() {
           <div className="flex items-center space-x-4">
             {/* LinkedIn Icon */}
             <motion.a
-              href="https://linkedin.com/in/your-profile"
+              href="https://www.linkedin.com/in/chester-luke-maligaso-812732359"
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, y: -20 }}
