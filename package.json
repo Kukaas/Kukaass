@@ -7,7 +7,8 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "seed": "node scripts/seed-projects.js"
+    "seed": "node scripts/seed-projects.js",
+    "test-sitemap": "node scripts/test-sitemap.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
