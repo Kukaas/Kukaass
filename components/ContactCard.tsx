@@ -33,18 +33,18 @@ const socialLinks = [
 
 export default function ContactCard() {
   return (
-    <GlassCard className="max-w-md mx-auto p-8">
-      <div className="text-center space-y-8">
+    <GlassCard className="max-w-md mx-auto p-6 sm:p-8">
+      <div className="text-center space-y-6 sm:space-y-8">
         <div>
-          <h3 className="text-2xl font-bold text-white mb-4">
+          <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
             Get In Touch
           </h3>
-          <p className="text-gray-400 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-400 leading-relaxed">
             Let&apos;s work together on your next project
           </p>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {socialLinks.map((link, index) => (
             <motion.a
               key={link.name}
@@ -56,19 +56,19 @@ export default function ContactCard() {
               viewport={{ once: true }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`flex items-center justify-between p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300 group ${link.color}`}
+              className={`flex items-center justify-between p-3 sm:p-4 rounded-lg sm:rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300 group ${link.color}`}
             >
-              <div className="flex items-center gap-4">
-                <link.icon className="w-5 h-5" />
-                <span className="font-medium">{link.name}</span>
+              <div className="flex items-center gap-3 sm:gap-4">
+                <link.icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="font-medium text-sm sm:text-base">{link.name}</span>
               </div>
-              <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </motion.a>
           ))}
         </div>
 
-        <div className="pt-6 border-t border-white/10">
-          <p className="text-sm text-gray-500 leading-relaxed">
+        <div className="pt-4 sm:pt-6 border-t border-white/10">
+          <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
             Available for freelance opportunities and full-time positions
           </p>
         </div>
