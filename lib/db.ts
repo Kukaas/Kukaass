@@ -1,15 +1,26 @@
 import mongoose from 'mongoose';
 
+// Define the cache interface
+interface MongooseCache {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+}
+
+// Extend the global type to include mongoose
+declare global {
+  var mongoose: MongooseCache | undefined;
+}
+
 const MONGODB_URI = process.env.NEXT_PUBLIC_MONGODB_URI;
 
 if (!MONGODB_URI) {
   throw new Error('Please define the NEXT_PUBLIC_MONGODB_URI environment variable inside .env.local');
 }
 
-let cached = global.mongoose;
+const cached: MongooseCache = global.mongoose || { conn: null, promise: null };
 
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
+if (!global.mongoose) {
+  global.mongoose = cached;
 }
 
 async function dbConnect() {

@@ -11,6 +11,7 @@ interface Project {
   link: string;
   images: string[];
   createdAt: string;
+  githubLink: string;
 }
 
 export default function Projects() {

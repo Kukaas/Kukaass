@@ -2,7 +2,7 @@
 
 import { useState, useEffect, use } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ExternalLink, Github, Calendar, User, Code, Zap, Target, Lightbulb, Clock, Award } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Github, Code, Zap, Target, Lightbulb, Award } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import GlassCard from '@/components/GlassCard';
