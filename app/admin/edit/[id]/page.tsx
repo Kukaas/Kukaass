@@ -1,37 +1,21 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, use, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Trash2, ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import GlassCard from '@/components/GlassCard';
-
-interface Project {
-  _id: string;
-  title: string;
-  description: string;
-  link: string;
-  githubLink?: string;
-  images: string[];
-  techStack: string[];
-  features: string[];
-  challenges: string[];
-  solutions: string[];
-  purpose: string[];
-  duration?: string;
-  role?: string;
-  status: 'completed' | 'in-progress' | 'planned';
-  createdAt: string | Date;
-  isPrivate?: boolean;
-}
+import { useProject, useUpdateProject } from '@/hooks/use-projects';
 
 export default function EditProject({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const { data: project, isLoading: loading } = useProject(id);
+  const updateProjectMutation = useUpdateProject();
   const [formData, setFormData] = useState<{
     title: string;
     description: string;
@@ -64,39 +48,27 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
     status: 'completed',
   });
 
+  // Initialize form data when project is loaded
   useEffect(() => {
-    const fetchProject = async () => {
-      try {
-        const response = await fetch(`/api/projects/${id}`);
-        if (!response.ok) throw new Error('Project not found');
-        const project: Project = await response.json();
-
-        setFormData({
-          title: project.title,
-          description: project.description,
-          link: project.link,
-          githubLink: project.githubLink || '',
-          isPrivate: project.isPrivate || false,
-          images: project.images,
-          techStack: project.techStack || [],
-          features: project.features || [],
-          challenges: project.challenges || [],
-          solutions: project.solutions || [],
-          purpose: project.purpose || [],
-          duration: project.duration || '',
-          role: project.role || '',
-          status: project.status || 'completed',
-        });
-      } catch (error) {
-        console.error('Error fetching project:', error);
-        router.push('/admin');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProject();
-  }, [id, router]);
+    if (project) {
+      setFormData({
+        title: project.title,
+        description: project.description,
+        link: project.link,
+        githubLink: project.githubLink || '',
+        isPrivate: project.isPrivate || false,
+        images: project.images,
+        techStack: project.techStack || [],
+        features: project.features || [],
+        challenges: project.challenges || [],
+        solutions: project.solutions || [],
+        purpose: project.purpose || [],
+        duration: project.duration || '',
+        role: project.role || '',
+        status: project.status || 'completed',
+      });
+    }
+  }, [project]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,13 +93,10 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
         imageData.push(uploadResult.base64); // Add new image to existing ones
       }
 
-      const response = await fetch(`/api/projects/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, images: imageData }),
+      await updateProjectMutation.mutateAsync({
+        id,
+        data: { ...formData, images: imageData }
       });
-
-      if (!response.ok) throw new Error('Failed to update project');
 
       router.push('/admin');
     } catch (error) {

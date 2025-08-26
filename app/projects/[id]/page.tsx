@@ -1,56 +1,26 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, use } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink, Github, Code, Zap, Target, Lightbulb, Award, Lock } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import GlassCard from '@/components/GlassCard';
 import PrivateRepoAccess from '@/components/PrivateRepoAccess';
-
-interface Project {
-  _id: string;
-  title: string;
-  description: string;
-  link: string;
-  githubLink?: string;
-  images: string[];
-  techStack: string[];
-  features: string[];
-  challenges: string[];
-  solutions: string[];
-  purpose: string[];
-  duration?: string;
-  role?: string;
-  status: 'completed' | 'in-progress' | 'planned';
-  createdAt: string | Date;
-  isPrivate?: boolean;
-}
+import { useProject } from '@/hooks/use-projects';
 
 export default function ProjectDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const [project, setProject] = useState<Project | null>(null);
-  const [loading, setLoading] = useState(true);
   const [showPrivateAccess, setShowPrivateAccess] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchProject = async () => {
-      try {
-        const response = await fetch(`/api/projects/${id}`);
-        if (!response.ok) throw new Error('Project not found');
-        const data = await response.json();
-        setProject(data);
-      } catch (error) {
-        console.error('Error fetching project:', error);
-        router.push('/#projects');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const { data: project, isLoading: loading, error } = useProject(id);
 
-    fetchProject();
-  }, [id, router]);
+  // Handle error by redirecting
+  if (error) {
+    console.error('Error fetching project:', error);
+    router.push('/#projects');
+  }
 
   if (loading) {
     return (

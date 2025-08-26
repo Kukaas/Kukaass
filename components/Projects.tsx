@@ -1,42 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ProjectCard from './ProjectCard';
-
-interface Project {
-  _id: string;
-  title: string;
-  description: string;
-  link: string;
-  images: string[];
-  createdAt: string;
-  githubLink: string;
-}
+import { useProjects, type Project } from '@/hooks/use-projects';
 
 export default function Projects() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const response = await fetch('/api/projects');
-        if (!response.ok) {
-          throw new Error('Failed to fetch projects');
-        }
-        const data = await response.json();
-        setProjects(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProjects();
-  }, []);
+  const { data: projects, isLoading: loading, error } = useProjects();
 
   if (loading) {
     return (
@@ -85,7 +54,7 @@ export default function Projects() {
           </motion.div>
 
           <div className="text-center">
-            <p className="text-red-400 text-lg">{error}</p>
+            <p className="text-red-400 text-lg">{error.message}</p>
             <p className="text-gray-400 mt-2">Please try again later.</p>
           </div>
         </div>
@@ -112,14 +81,14 @@ export default function Projects() {
           </p>
         </motion.div>
 
-        {projects.length === 0 ? (
+        {projects?.length === 0 ? (
           <div className="text-center">
             <p className="text-gray-400 text-lg">No projects available yet.</p>
             <p className="text-gray-500 mt-2">Check back soon for updates!</p>
           </div>
                  ) : (
            <div className="grid grid-cols-1 gap-8">
-             {projects.map((project, index) => (
+             {projects?.map((project: Project, index: number) => (
                <ProjectCard key={project._id} project={project} index={index} />
              ))}
            </div>

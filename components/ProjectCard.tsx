@@ -7,17 +7,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import GlassCard from './GlassCard';
 import PrivateRepoAccess from './PrivateRepoAccess';
-
-interface Project {
-  _id: string;
-  title: string;
-  description: string;
-  link: string;
-  images: string[];
-  createdAt: string;
-  githubLink: string;
-  isPrivate?: boolean;
-}
+import { type Project } from '@/hooks/use-projects';
 
 interface ProjectCardProps {
   project: Project;
@@ -120,7 +110,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
       </motion.div>
 
       {/* Private Repository Access Modal */}
-      {showPrivateAccess && (
+      {showPrivateAccess && project.githubLink && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}

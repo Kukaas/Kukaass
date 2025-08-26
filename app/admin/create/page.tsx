@@ -6,11 +6,13 @@ import { Plus, Trash2, ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import GlassCard from '@/components/GlassCard';
+import { useCreateProject } from '@/hooks/use-projects';
 
 export default function CreateProject() {
   const router = useRouter();
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const createProjectMutation = useCreateProject();
   const [formData, setFormData] = useState<{
     title: string;
     description: string;
@@ -66,13 +68,7 @@ export default function CreateProject() {
         imageData = [uploadResult.base64];
       }
 
-      const response = await fetch('/api/projects', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, images: imageData }),
-      });
-
-      if (!response.ok) throw new Error('Failed to save project');
+      await createProjectMutation.mutateAsync({ ...formData, images: imageData });
 
       router.push('/admin');
     } catch (error) {

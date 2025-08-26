@@ -8,33 +8,16 @@ import { useRouter } from 'next/navigation';
 import GlassCard from '@/components/GlassCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-
-interface Project {
-  _id: string;
-  title: string;
-  description: string;
-  link: string;
-  githubLink?: string;
-  images: string[];
-  techStack: string[];
-  features: string[];
-  challenges: string[];
-  solutions: string[];
-  purpose: string[];
-  duration?: string;
-  role?: string;
-  status: 'completed' | 'in-progress' | 'planned';
-  createdAt: string | Date;
-  isPrivate?: boolean;
-}
+import { useProjects, useDeleteProject, type Project } from '@/hooks/use-projects';
 
 export default function AdminDashboard() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
+
+  const { data: projects = [], isLoading: loading } = useProjects();
+  const deleteProjectMutation = useDeleteProject();
 
 
   const handleLogin = (e: React.FormEvent) => {
@@ -60,24 +43,7 @@ export default function AdminDashboard() {
     }
   }, []);
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchProjects();
-    }
-  }, [isAuthenticated]);
-
-  const fetchProjects = async () => {
-    try {
-      const response = await fetch('/api/projects');
-      if (!response.ok) throw new Error('Failed to fetch projects');
-      const data = await response.json();
-      setProjects(data);
-    } catch (error) {
-      console.error('Error fetching projects:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Projects are automatically fetched by TanStack Query when authenticated
 
 
 
@@ -85,13 +51,7 @@ export default function AdminDashboard() {
     if (!confirm('Are you sure you want to delete this project? This action cannot be undone.')) return;
 
     try {
-      const response = await fetch(`/api/projects/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) throw new Error('Failed to delete project');
-
-      await fetchProjects();
+      await deleteProjectMutation.mutateAsync(id);
     } catch (error) {
       console.error('Error deleting project:', error);
       alert('Failed to delete project. Please try again.');
