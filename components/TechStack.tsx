@@ -49,6 +49,7 @@ export default function TechStack() {
   const controls = useAnimation();
   const containerRef = useRef<HTMLDivElement>(null);
   const positionRef = useRef(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     // Duplicate the stack multiple times for infinite scroll effect
@@ -56,12 +57,24 @@ export default function TechStack() {
     setDuplicatedStack(duplicated);
   }, []);
 
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // 768px is the sm breakpoint
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   useEffect(() => {
     if (!isPaused) {
       controls.start({
-        x: [0, -50 * duplicatedStack.length],
+        x: [positionRef.current, -50 * duplicatedStack.length],
         transition: {
-          duration: 55,
+          duration: 50,
           repeat: Infinity,
           ease: "linear"
         }
@@ -72,11 +85,17 @@ export default function TechStack() {
   }, [controls, duplicatedStack.length, isPaused]);
 
   const handleMouseEnter = () => {
-    setIsPaused(true);
+    // Only pause on desktop (non-mobile)
+    if (!isMobile) {
+      setIsPaused(true);
+    }
   };
 
   const handleMouseLeave = () => {
-    setIsPaused(false);
+    // Only resume on desktop (non-mobile)
+    if (!isMobile) {
+      setIsPaused(false);
+    }
   };
 
   const handleAnimationUpdate = (latest: { x: number }) => {
@@ -112,7 +131,7 @@ export default function TechStack() {
           {/* Hybrid scroll container */}
           <div
             ref={containerRef}
-            className="overflow-x-auto scrollbar-hide"
+            className={`overflow-x-auto scrollbar-hide ${isMobile ? 'pointer-events-none' : ''}`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
