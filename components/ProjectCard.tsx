@@ -43,20 +43,20 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
       viewport={{ once: true }}
-      whileHover={{ y: -10 }}
+      whileHover={{ y: -5 }}
     >
       <GlassCard className="h-full group cursor-pointer" onClick={handleCardClick}>
         <div className="space-y-4">
           {/* Project Image */}
           {project.images && project.images.length > 0 && (
             <div className="relative overflow-hidden rounded-xl aspect-video">
-              <Image
-                src={project.images[0]}
-                alt={project.title}
-                fill
-                className="object-cover transition-transform duration-300 group-hover:scale-110"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              />
+                  <Image
+                 src={project.images[0]}
+                 alt={project.title}
+                 fill
+                 className="object-cover transition-transform duration-300 group-hover:scale-103"
+                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
               {/* View Details Overlay */}
@@ -83,8 +83,8 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
             <div className="flex items-center gap-3 pt-2">
               <motion.button
                 onClick={(e) => handleActionClick(e, 'demo')}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors duration-200"
               >
                 <ExternalLink className="w-4 h-4" />
@@ -93,8 +93,8 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
 
               <motion.button
                 onClick={(e) => handleActionClick(e, 'code')}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 className="flex items-center gap-2 text-gray-400 hover:text-gray-300 transition-colors duration-200"
               >
                 <Github className="w-4 h-4" />

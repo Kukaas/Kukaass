@@ -17,7 +17,7 @@ export default function GlassCard({ children, className, onClick }: GlassCardPro
       )}
       onClick={onClick}
     >
-      <div className="relative z-10 p-6">
+      <div className="relative z-10 p-6 overflow-hidden">
         {children}
       </div>
     </div>

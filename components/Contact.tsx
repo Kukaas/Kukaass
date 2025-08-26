@@ -5,7 +5,7 @@ import ContactCard from './ContactCard';
 
 export default function Contact() {
   return (
-    <section id="contact" className="py-16 sm:py-20 lg:py-24 px-3 sm:px-4 lg:px-8">
+    <section id="contact" className="py-16 sm:py-20 lg:py-24 px-3 sm:px-4 lg:px-8 overflow-hidden">
       <div className="w-[95%] sm:w-[90%] max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

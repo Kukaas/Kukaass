@@ -91,7 +91,7 @@ export default function RootLayout({
         <link rel="canonical" href="https://kukaass.vercel.app/" />
       </head>
       <body
-        className={`${poppins.variable} antialiased bg-background text-foreground`}
+        className={`${poppins.variable} antialiased bg-background text-foreground overflow-x-hidden`}
       >
         {children}
       </body>

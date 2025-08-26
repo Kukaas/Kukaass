@@ -25,6 +25,7 @@ export default function Navbar() {
         "rounded-xl sm:rounded-2xl border border-white/20 backdrop-blur-2xl",
         "shadow-2xl shadow-black/20",
         "w-[95%] sm:w-[90%] max-w-4xl mx-auto",
+        "overflow-hidden",
         isScrolled
           ? "bg-white/10 backdrop-blur-3xl shadow-2xl shadow-black/30"
           : "bg-white/5 backdrop-blur-xl"
