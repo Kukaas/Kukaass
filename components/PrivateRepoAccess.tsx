@@ -1,9 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Github, ExternalLink, Lock } from 'lucide-react';
-import GlassCard from './GlassCard';
 
 interface PrivateRepoAccessProps {
   repoUrl: string;
@@ -11,12 +9,6 @@ interface PrivateRepoAccessProps {
 }
 
 export default function PrivateRepoAccess({ repoUrl, projectTitle }: PrivateRepoAccessProps) {
-  const [showAccessOptions, setShowAccessOptions] = useState(false);
-
-  // Extract repo info from URL
-  const match = repoUrl.match(/github\.com\/([^\/]+)\/([^\/\?]+)/);
-  const username = match?.[1];
-  const repoName = match?.[2];
 
   const handleRequestAccess = () => {
     const subject = encodeURIComponent(`Access Request: ${projectTitle} Repository`);
