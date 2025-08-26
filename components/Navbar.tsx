@@ -63,7 +63,7 @@ export default function Navbar() {
 
             {/* GitHub Icon */}
             <motion.a
-              href="https://github.com/your-username"
+              href="https://github.com/Kukaas"
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, y: -20 }}
