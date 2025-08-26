@@ -12,7 +12,7 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
   const { id } = use(params);
   const router = useRouter();
   const [uploading, setUploading] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const { data: project, isLoading: loading } = useProject(id);
   const updateProjectMutation = useUpdateProject();
@@ -77,20 +77,23 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
     try {
       const imageData = [...formData.images]; // Start with existing images
 
-      // If there's a selected file, upload it and add to existing images
-      if (selectedFile) {
+      // If there are selected files, upload them and add to existing images
+      if (selectedFiles.length > 0) {
         const formDataFile = new FormData();
-        formDataFile.append('image', selectedFile);
+        selectedFiles.forEach(file => {
+          formDataFile.append('images', file);
+        });
 
         const uploadResponse = await fetch('/api/upload', {
           method: 'POST',
           body: formDataFile,
         });
 
-        if (!uploadResponse.ok) throw new Error('Failed to upload image');
+        if (!uploadResponse.ok) throw new Error('Failed to upload images');
 
         const uploadResult = await uploadResponse.json();
-        imageData.push(uploadResult.base64); // Add new image to existing ones
+        const newImages = uploadResult.images.map((img: { base64: string }) => img.base64);
+        imageData.push(...newImages); // Add new images to existing ones
       }
 
       await updateProjectMutation.mutateAsync({
@@ -615,7 +618,7 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
 
                              <div>
                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                   Project Image
+                   Project Images
                  </label>
 
                  {/* Existing Images Preview */}
@@ -650,17 +653,49 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
                    </div>
                  )}
 
-                 <input
-                   type="file"
-                   accept="image/*"
-                   onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                   className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-white file:text-black hover:file:bg-gray-100"
-                 />
-                 {selectedFile && (
-                   <p className="text-sm text-green-400 mt-2">
-                     Selected: {selectedFile.name}
-                   </p>
+                 {/* New Images Preview */}
+                 {selectedFiles.length > 0 && (
+                   <div className="mb-4">
+                     <p className="text-sm text-gray-400 mb-2">New Images to Add ({selectedFiles.length}):</p>
+                     <div className="flex flex-wrap gap-3">
+                       {selectedFiles.map((file, index) => (
+                         <div key={index} className="relative">
+                           <Image
+                             src={URL.createObjectURL(file)}
+                             alt={`New image ${index + 1}`}
+                             width={96}
+                             height={96}
+                             className="w-24 h-24 object-cover rounded-lg border border-white/20"
+                           />
+                           <motion.button
+                             type="button"
+                             whileHover={{ scale: 1.1 }}
+                             whileTap={{ scale: 0.9 }}
+                             onClick={() => {
+                               const newFiles = selectedFiles.filter((_, i) => i !== index);
+                               setSelectedFiles(newFiles);
+                             }}
+                             className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                           >
+                             <Trash2 className="w-3 h-3" />
+                           </motion.button>
+                         </div>
+                       ))}
+                     </div>
+                   </div>
                  )}
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={(e) => {
+                      const newFiles = Array.from(e.target.files || []);
+                      setSelectedFiles(prev => [...prev, ...newFiles]); // Append new files to existing ones
+                    }}
+                    className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-white file:text-black hover:file:bg-gray-100"
+                  />
+                 <p className="text-xs text-gray-400 mt-2">You can select multiple images to add to the existing ones.</p>
                </div>
 
               <div className="flex gap-4 pt-6">

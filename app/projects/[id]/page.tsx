@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import GlassCard from '@/components/GlassCard';
 import PrivateRepoAccess from '@/components/PrivateRepoAccess';
+import ImageCarousel from '@/components/ImageCarousel';
 import { useProject } from '@/hooks/use-projects';
 
 export default function ProjectDetails({ params }: { params: Promise<{ id: string }> }) {
@@ -175,49 +176,17 @@ export default function ProjectDetails({ params }: { params: Promise<{ id: strin
                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
              {/* Left Column - Project Images */}
              <div className="lg:col-span-2 space-y-6 sm:space-y-8">
-              {/* Main Project Image */}
+              {/* Project Image Carousel */}
               {project.images && project.images.length > 0 && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
                 >
-                  <GlassCard>
-                    <div className="relative overflow-hidden rounded-xl aspect-video">
-                      <Image
-                        src={project.images[0]}
-                        alt={project.title}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 50vw"
-                      />
-                    </div>
-                  </GlassCard>
-                </motion.div>
-              )}
-
-              {/* Additional Images Grid */}
-              {project.images && project.images.length > 1 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <GlassCard>
-                    <div className="grid grid-cols-2 gap-4">
-                      {project.images.slice(1).map((image, index) => (
-                        <div key={index} className="relative overflow-hidden rounded-lg aspect-video">
-                          <Image
-                            src={image}
-                            alt={`${project.title} screenshot ${index + 2}`}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 50vw, 25vw"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </GlassCard>
+                  <ImageCarousel
+                    images={project.images}
+                    title={project.title}
+                  />
                 </motion.div>
               )}
 

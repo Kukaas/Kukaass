@@ -11,7 +11,7 @@ import { useCreateProject } from '@/hooks/use-projects';
 export default function CreateProject() {
   const router = useRouter();
   const [uploading, setUploading] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const createProjectMutation = useCreateProject();
   const [formData, setFormData] = useState<{
     title: string;
@@ -50,22 +50,25 @@ export default function CreateProject() {
     setUploading(true);
 
     try {
-      let imageData = formData.images;
+      const imageData = [...formData.images]; // Start with existing images
 
-      // If there's a selected file, upload it first
-      if (selectedFile) {
+      // If there are selected files, upload them first
+      if (selectedFiles.length > 0) {
         const formDataFile = new FormData();
-        formDataFile.append('image', selectedFile);
+        selectedFiles.forEach(file => {
+          formDataFile.append('images', file);
+        });
 
         const uploadResponse = await fetch('/api/upload', {
           method: 'POST',
           body: formDataFile,
         });
 
-        if (!uploadResponse.ok) throw new Error('Failed to upload image');
+        if (!uploadResponse.ok) throw new Error('Failed to upload images');
 
         const uploadResult = await uploadResponse.json();
-        imageData = [uploadResult.base64];
+        const newImages = uploadResult.images.map((img: { base64: string }) => img.base64);
+        imageData.push(...newImages); // Add new images to existing ones
       }
 
       await createProjectMutation.mutateAsync({ ...formData, images: imageData });
@@ -581,30 +584,37 @@ export default function CreateProject() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Project Image
+                  Project Images
                 </label>
 
                 {/* Image Preview */}
-                {selectedFile && (
+                {selectedFiles.length > 0 && (
                   <div className="mb-4">
-                    <p className="text-sm text-gray-400 mb-2">Preview:</p>
-                    <div className="relative inline-block">
-                      <Image
-                        src={URL.createObjectURL(selectedFile)}
-                        alt="Preview"
-                        width={96}
-                        height={96}
-                        className="w-24 h-24 object-cover rounded-lg border border-white/20"
-                      />
-                      <motion.button
-                        type="button"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => setSelectedFile(null)}
-                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                      </motion.button>
+                    <p className="text-sm text-gray-400 mb-2">Preview ({selectedFiles.length} images):</p>
+                    <div className="flex flex-wrap gap-3">
+                      {selectedFiles.map((file, index) => (
+                        <div key={index} className="relative">
+                          <Image
+                            src={URL.createObjectURL(file)}
+                            alt={`Preview ${index + 1}`}
+                            width={96}
+                            height={96}
+                            className="w-24 h-24 object-cover rounded-lg border border-white/20"
+                          />
+                          <motion.button
+                            type="button"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => {
+                              const newFiles = selectedFiles.filter((_, i) => i !== index);
+                              setSelectedFiles(newFiles);
+                            }}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </motion.button>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
@@ -612,9 +622,14 @@ export default function CreateProject() {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                  multiple
+                  onChange={(e) => {
+                    const newFiles = Array.from(e.target.files || []);
+                    setSelectedFiles(prev => [...prev, ...newFiles]); // Append new files to existing ones
+                  }}
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-white file:text-black hover:file:bg-gray-100 transition-colors"
                 />
+                <p className="text-xs text-gray-400 mt-2">You can select multiple images. The first image will be used as the main preview.</p>
               </div>
 
               <div className="flex gap-4 pt-6">
