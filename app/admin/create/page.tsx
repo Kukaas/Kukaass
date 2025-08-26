@@ -25,7 +25,9 @@ export default function CreateProject() {
     challenges: string[];
     solutions: string[];
     purpose: string[];
-    duration: string;
+    startDate: string;
+    endDate: string;
+    isOngoing: boolean;
     role: string;
     status: 'completed' | 'in-progress' | 'planned';
   }>({
@@ -40,7 +42,9 @@ export default function CreateProject() {
     challenges: [],
     solutions: [],
     purpose: [],
-    duration: '',
+    startDate: '',
+    endDate: '',
+    isOngoing: false,
     role: '',
     status: 'completed',
   });
@@ -71,7 +75,20 @@ export default function CreateProject() {
         imageData.push(...newImages); // Add new images to existing ones
       }
 
-      await createProjectMutation.mutateAsync({ ...formData, images: imageData });
+      // Prepare data for submission
+      const submissionData = { ...formData, images: imageData };
+
+      // Clear endDate if project is ongoing
+      if (submissionData.isOngoing) {
+        submissionData.endDate = '';
+      }
+
+      // Ensure startDate is not empty (API will handle fallback)
+      if (!submissionData.startDate) {
+        console.warn('No start date provided, API will use current date as fallback');
+      }
+
+      await createProjectMutation.mutateAsync(submissionData);
 
       router.push('/admin');
     } catch (error) {
@@ -253,7 +270,7 @@ export default function CreateProject() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Role
@@ -269,15 +286,40 @@ export default function CreateProject() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Duration
+                    Start Date *
                   </label>
                   <input
-                    type="text"
-                    value={formData.duration}
-                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                    type="date"
+                    value={formData.startDate}
+                    onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
                     className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
-                    placeholder="e.g., 3 months"
+                    required
                   />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    End Date
+                  </label>
+                  <input
+                    type="date"
+                    value={formData.endDate}
+                    onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
+                    disabled={formData.isOngoing}
+                  />
+                  <div className="flex items-center space-x-3 mt-3">
+                    <input
+                      type="checkbox"
+                      id="isOngoing"
+                      checked={formData.isOngoing}
+                      onChange={(e) => setFormData({ ...formData, isOngoing: e.target.checked })}
+                      className="w-4 h-4 text-blue-600 bg-white/10 border-white/20 rounded focus:ring-blue-500 focus:ring-2"
+                    />
+                    <label htmlFor="isOngoing" className="text-sm font-medium text-gray-300">
+                      Still working on this project
+                    </label>
+                  </div>
                 </div>
 
                 <div>

@@ -19,10 +19,20 @@ export async function GET(
       );
     }
 
-    // Convert to plain object and ensure isPrivate field exists
+    // Convert to plain object and ensure backward compatibility
     const projectData = project.toObject();
     if (projectData.isPrivate === undefined) {
       projectData.isPrivate = false;
+    }
+    // Ensure new date fields exist for backward compatibility
+    if (projectData.startDate === undefined) {
+      projectData.startDate = null;
+    }
+    if (projectData.endDate === undefined) {
+      projectData.endDate = null;
+    }
+    if (projectData.isOngoing === undefined) {
+      projectData.isOngoing = false;
     }
 
     return NextResponse.json(projectData);
@@ -43,7 +53,24 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
 
-    const project = await Project.findByIdAndUpdate(id, body, {
+            // Convert date strings to Date objects
+    const updateData = { ...body };
+
+    // Handle startDate - if not provided, use current date as fallback
+    if (updateData.startDate && typeof updateData.startDate === 'string') {
+      updateData.startDate = new Date(updateData.startDate);
+    } else if (!updateData.startDate) {
+      // If no startDate provided, use current date as fallback
+      updateData.startDate = new Date();
+    }
+
+    if (updateData.endDate && typeof updateData.endDate === 'string' && updateData.endDate.trim() !== '') {
+      updateData.endDate = new Date(updateData.endDate);
+    } else if (updateData.endDate === '' || updateData.endDate === null) {
+      updateData.endDate = null;
+    }
+
+    const project = await Project.findByIdAndUpdate(id, updateData, {
       new: true,
       runValidators: true,
     });
@@ -56,7 +83,8 @@ export async function PUT(
     }
 
     return NextResponse.json(project);
-  } catch {
+  } catch (error) {
+    console.error('Update error:', error);
     return NextResponse.json(
       { error: 'Failed to update project' },
       { status: 500 }

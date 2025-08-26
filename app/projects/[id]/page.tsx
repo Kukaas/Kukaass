@@ -3,7 +3,6 @@
 import { useState, use } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink, Github, Code, Zap, Target, Lightbulb, Award, Lock } from 'lucide-react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import GlassCard from '@/components/GlassCard';
 import PrivateRepoAccess from '@/components/PrivateRepoAccess';
@@ -355,23 +354,40 @@ export default function ProjectDetails({ params }: { params: Promise<{ id: strin
                          </div>
                        )}
 
-                       {project.duration && (
+                       {project.startDate && (
                          <div className="flex items-center justify-between p-3 sm:p-4 bg-white/5 rounded-lg border border-white/10">
-                           <span className="text-gray-300 text-sm sm:text-base">Duration</span>
-                           <span className="text-white font-medium text-sm sm:text-base">{project.duration}</span>
+                           <span className="text-gray-300 text-sm sm:text-base">Start Date</span>
+                           <span className="text-white font-medium text-sm sm:text-base">
+                             {new Date(project.startDate).toLocaleDateString('en-US', {
+                               year: 'numeric',
+                               month: 'long',
+                               day: 'numeric'
+                             })}
+                           </span>
                          </div>
                        )}
 
-                       <div className="flex items-center justify-between p-3 sm:p-4 bg-white/5 rounded-lg border border-white/10">
-                         <span className="text-gray-300 text-sm sm:text-base">Created</span>
-                         <span className="text-white font-medium text-sm sm:text-base">
-                           {new Date(project.createdAt).toLocaleDateString('en-US', {
-                             year: 'numeric',
-                             month: 'long',
-                             day: 'numeric'
-                           })}
-                         </span>
-                       </div>
+                       {project.endDate && (
+                         <div className="flex items-center justify-between p-3 sm:p-4 bg-white/5 rounded-lg border border-white/10">
+                           <span className="text-gray-300 text-sm sm:text-base">End Date</span>
+                           <span className="text-white font-medium text-sm sm:text-base">
+                             {new Date(project.endDate).toLocaleDateString('en-US', {
+                               year: 'numeric',
+                               month: 'long',
+                               day: 'numeric'
+                             })}
+                           </span>
+                         </div>
+                       )}
+
+                       {(project.calculatedDuration || project.duration) && (
+                         <div className="flex items-center justify-between p-3 sm:p-4 bg-white/5 rounded-lg border border-white/10">
+                           <span className="text-gray-300 text-sm sm:text-base">Duration</span>
+                           <span className="text-white font-medium text-sm sm:text-base">
+                             {project.calculatedDuration || project.duration}
+                           </span>
+                         </div>
+                       )}
                     </div>
                   </div>
                 </GlassCard>

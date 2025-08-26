@@ -12,7 +12,11 @@ export interface Project {
   challenges: string[];
   solutions: string[];
   purpose: string[];
-  duration?: string;
+  startDate?: string | Date;
+  endDate?: string | Date;
+  isOngoing?: boolean;
+  duration?: string; // Keep for backward compatibility
+  calculatedDuration?: string; // Virtual field from mongoose
   role?: string;
   status: 'completed' | 'in-progress' | 'planned';
   createdAt: string | Date;
