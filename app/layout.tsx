@@ -65,9 +65,25 @@ export const metadata: Metadata = {
     google: "Ji90_WE6M1rUzdy1bigGQjBUkw3kmwu8rVp-NDUCrkU",
   },
   icons: {
-    icon: '/logo.jpeg',
-    shortcut: '/logo.jpeg',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/logo.jpeg', type: 'image/jpeg', sizes: '32x32' },
+    ],
+    shortcut: '/favicon.ico',
     apple: '/logo.jpeg',
+    other: [
+      {
+        rel: 'icon',
+        type: 'image/x-icon',
+        url: '/favicon.ico',
+      },
+      {
+        rel: 'icon',
+        type: 'image/jpeg',
+        url: '/logo.jpeg',
+        sizes: '32x32',
+      },
+    ],
   },
   alternates: {
     canonical: "https://kukaass.vercel.app/",
@@ -90,6 +106,12 @@ export default function RootLayout({
         <meta name="googlebot" content="index, follow" />
         <meta name="googlebot-news" content="nosnippet" />
         <link rel="canonical" href="https://kukaass.vercel.app/" />
+
+        {/* Favicon links for better browser and search engine support */}
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/jpeg" href="/logo.jpeg" sizes="32x32" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/logo.jpeg" />
       </head>
       <body
         className={`${poppins.variable} antialiased bg-background text-foreground overflow-x-hidden`}
