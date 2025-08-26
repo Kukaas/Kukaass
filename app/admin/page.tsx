@@ -25,6 +25,7 @@ interface Project {
   role?: string;
   status: 'completed' | 'in-progress' | 'planned';
   createdAt: string | Date;
+  isPrivate?: boolean;
 }
 
 export default function AdminDashboard() {
@@ -229,12 +230,12 @@ export default function AdminDashboard() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ y: -5 }}
-              className="transition-all duration-300"
+              className="transition-all duration-300 h-full"
             >
-              <GlassCard className="hover:shadow-2xl transition-all duration-300">
-                <div className="space-y-4">
+              <GlassCard className="hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
+                <div className="flex-1 flex flex-col">
                   {project.images && project.images.length > 0 && (
-                    <div className="aspect-video rounded-lg overflow-hidden relative">
+                    <div className="aspect-video rounded-lg overflow-hidden relative flex-shrink-0 mb-4">
                       <Image
                         src={project.images[0]}
                         alt={project.title}
@@ -245,40 +246,40 @@ export default function AdminDashboard() {
                     </div>
                   )}
 
-                  <div>
-                    <h3 className="text-lg font-bold text-white mb-2">{project.title}</h3>
-                    <p className="text-gray-400 text-sm mb-3 line-clamp-2">{project.description}</p>
+                  <div className="flex-1 flex flex-col">
+                    <h3 className="text-lg font-bold text-white mb-2 line-clamp-2">{project.title}</h3>
+                    <p className="text-gray-400 text-sm mb-3 line-clamp-2 flex-1">{project.description}</p>
                     <a
                       href={project.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-purple-400 text-sm hover:text-purple-300 flex items-center gap-1"
+                      className="text-purple-400 text-sm hover:text-purple-300 flex items-center gap-1 mt-auto"
                     >
                       <Eye className="w-4 h-4" />
                       View Project
                     </a>
                   </div>
+                </div>
 
-                  <div className="flex gap-3 pt-4">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => handleEdit(project)}
-                      className="flex-1 bg-white/10 text-white px-4 py-3 rounded-lg text-sm font-medium flex items-center justify-center gap-2 hover:bg-white/20 border border-white/20 transition-all duration-200 hover:shadow-lg"
-                    >
-                      <Edit className="w-4 h-4" />
-                      Edit
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => handleDelete(project._id)}
-                      className="flex-1 bg-red-500/20 text-red-400 px-4 py-3 rounded-lg text-sm font-medium flex items-center justify-center gap-2 hover:bg-red-500/30 border border-red-500/30 transition-all duration-200 hover:shadow-lg"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                      Delete
-                    </motion.button>
-                  </div>
+                <div className="flex gap-3 pt-4 mt-auto">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => handleEdit(project)}
+                    className="flex-1 bg-white/10 text-white px-4 py-3 rounded-lg text-sm font-medium flex items-center justify-center gap-2 hover:bg-white/20 border border-white/20 transition-all duration-200 hover:shadow-lg"
+                  >
+                    <Edit className="w-4 h-4" />
+                    Edit
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => handleDelete(project._id)}
+                    className="flex-1 bg-red-500/20 text-red-400 px-4 py-3 rounded-lg text-sm font-medium flex items-center justify-center gap-2 hover:bg-red-500/30 border border-red-500/30 transition-all duration-200 hover:shadow-lg"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Delete
+                  </motion.button>
                 </div>
               </GlassCard>
             </motion.div>

@@ -23,6 +23,7 @@ interface Project {
   role?: string;
   status: 'completed' | 'in-progress' | 'planned';
   createdAt: string | Date;
+  isPrivate?: boolean;
 }
 
 export default function EditProject({ params }: { params: Promise<{ id: string }> }) {
@@ -36,6 +37,7 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
     description: string;
     link: string;
     githubLink: string;
+    isPrivate: boolean;
     images: string[];
     techStack: string[];
     features: string[];
@@ -50,6 +52,7 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
     description: '',
     link: '',
     githubLink: '',
+    isPrivate: false,
     images: [],
     techStack: [],
     features: [],
@@ -73,6 +76,7 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
           description: project.description,
           link: project.link,
           githubLink: project.githubLink || '',
+          isPrivate: project.isPrivate || false,
           images: project.images,
           techStack: project.techStack || [],
           features: project.features || [],
@@ -193,7 +197,7 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40"
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
                   placeholder="Project description (up to 2000 characters)..."
                   rows={6}
                   required
@@ -204,12 +208,12 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
                 <label className="block text-sm font-medium text-gray-300 mb-2">
                   Purpose
                 </label>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <div className="flex gap-2">
                     <input
                       type="text"
                       id="purposeInput"
-                      className="flex-1 px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40"
+                      className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
                       placeholder="Add a purpose (e.g., Portfolio, Learning)"
                       onKeyPress={(e) => {
                         if (e.key === 'Enter') {
@@ -235,7 +239,7 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
                           input.value = '';
                         }
                       }}
-                      className="px-4 py-2 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 border border-green-500/30 flex items-center gap-1"
+                      className="px-4 py-3 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 border border-green-500/30 flex items-center gap-2 transition-colors"
                     >
                       <Plus className="w-4 h-4" />
                       Add
@@ -249,7 +253,7 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
                           key={index}
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1 }}
-                          className="flex items-center gap-1 bg-white/10 border border-white/20 rounded-lg px-3 py-1"
+                          className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-lg px-3 py-2"
                         >
                           <span className="text-white text-sm">{purpose}</span>
                           <motion.button
@@ -260,7 +264,7 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
                               const newPurpose = formData.purpose.filter((_, i) => i !== index);
                               setFormData({ ...formData, purpose: newPurpose });
                             }}
-                            className="text-red-400 hover:text-red-300 ml-1"
+                            className="text-red-400 hover:text-red-300 transition-colors"
                           >
                             <Trash2 className="w-3 h-3" />
                           </motion.button>
@@ -271,84 +275,101 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Link
-                </label>
-                <input
-                  type="url"
-                  value={formData.link}
-                  onChange={(e) => setFormData({ ...formData, link: e.target.value })}
-                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40"
-                  placeholder="https://example.com"
-                  required
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Link
+                  </label>
+                  <input
+                    type="url"
+                    value={formData.link}
+                    onChange={(e) => setFormData({ ...formData, link: e.target.value })}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
+                    placeholder="https://example.com"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    GitHub Link
+                  </label>
+                  <input
+                    type="url"
+                    value={formData.githubLink}
+                    onChange={(e) => setFormData({ ...formData, githubLink: e.target.value })}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
+                    placeholder="https://github.com/username/repo"
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  GitHub Link
-                </label>
+              <div className="flex items-center space-x-3">
                 <input
-                  type="url"
-                  value={formData.githubLink}
-                  onChange={(e) => setFormData({ ...formData, githubLink: e.target.value })}
-                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40"
-                  placeholder="https://github.com/username/repo"
+                  type="checkbox"
+                  id="isPrivate"
+                  checked={formData.isPrivate}
+                  onChange={(e) => setFormData({ ...formData, isPrivate: e.target.checked })}
+                  className="w-4 h-4 text-blue-600 bg-white/10 border-white/20 rounded focus:ring-blue-500 focus:ring-2"
                 />
+                <label htmlFor="isPrivate" className="text-sm font-medium text-gray-300">
+                  Private Repository
+                </label>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Role
-                </label>
-                <input
-                  type="text"
-                  value={formData.role}
-                  onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40"
-                  placeholder="e.g., Full-stack Developer, Lead Developer"
-                />
-              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Role
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.role}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
+                    placeholder="e.g., Full-stack Developer"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Duration
-                </label>
-                <input
-                  type="text"
-                  value={formData.duration}
-                  onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40"
-                  placeholder="e.g., 3 months, 6 weeks"
-                />
-              </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Duration
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.duration}
+                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
+                    placeholder="e.g., 3 months"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Status
-                </label>
-                <select
-                  value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value as 'completed' | 'in-progress' | 'planned' })}
-                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40"
-                >
-                  <option value="completed">Completed</option>
-                  <option value="in-progress">In Progress</option>
-                  <option value="planned">Planned</option>
-                </select>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Status
+                  </label>
+                  <select
+                    value={formData.status}
+                    onChange={(e) => setFormData({ ...formData, status: e.target.value as 'completed' | 'in-progress' | 'planned' })}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-colors"
+                  >
+                    <option value="completed">Completed</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="planned">Planned</option>
+                  </select>
+                </div>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
                   Tech Stack
                 </label>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <div className="flex gap-2">
                     <input
                       type="text"
                       id="techInput"
-                      className="flex-1 px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40"
+                      className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
                       placeholder="Add a technology (e.g., React)"
                       onKeyPress={(e) => {
                         if (e.key === 'Enter') {
@@ -374,7 +395,7 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
                           input.value = '';
                         }
                       }}
-                      className="px-4 py-2 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 border border-green-500/30 flex items-center gap-1"
+                      className="px-4 py-3 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 border border-green-500/30 flex items-center gap-2 transition-colors"
                     >
                       <Plus className="w-4 h-4" />
                       Add
@@ -388,7 +409,7 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
                           key={index}
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1 }}
-                          className="flex items-center gap-1 bg-white/10 border border-white/20 rounded-lg px-3 py-1"
+                          className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-lg px-3 py-2"
                         >
                           <span className="text-white text-sm">{tech}</span>
                           <motion.button
@@ -399,7 +420,7 @@ export default function EditProject({ params }: { params: Promise<{ id: string }
                               const newTechStack = formData.techStack.filter((_, i) => i !== index);
                               setFormData({ ...formData, techStack: newTechStack });
                             }}
-                            className="text-red-400 hover:text-red-300 ml-1"
+                            className="text-red-400 hover:text-red-300 transition-colors"
                           >
                             <Trash2 className="w-3 h-3" />
                           </motion.button>

@@ -18,6 +18,10 @@ const ProjectSchema = new mongoose.Schema({
   githubLink: {
     type: String,
   },
+  isPrivate: {
+    type: Boolean,
+    default: false,
+  },
   images: {
     type: [String], // Array of base64 strings
     default: [],

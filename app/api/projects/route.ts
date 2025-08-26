@@ -6,7 +6,17 @@ export async function GET() {
   try {
     await dbConnect();
     const projects = await Project.find({}).sort({ createdAt: -1 });
-    return NextResponse.json(projects);
+
+    // Ensure isPrivate field exists for all projects
+    const projectsWithIsPrivate = projects.map(project => {
+      const projectData = project.toObject();
+      if (projectData.isPrivate === undefined) {
+        projectData.isPrivate = false;
+      }
+      return projectData;
+    });
+
+    return NextResponse.json(projectsWithIsPrivate);
   } catch {
     return NextResponse.json(
       { error: 'Failed to fetch projects' },

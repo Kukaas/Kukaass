@@ -19,7 +19,13 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(project);
+    // Convert to plain object and ensure isPrivate field exists
+    const projectData = project.toObject();
+    if (projectData.isPrivate === undefined) {
+      projectData.isPrivate = false;
+    }
+
+    return NextResponse.json(projectData);
   } catch {
     return NextResponse.json(
       { error: 'Failed to fetch project' },

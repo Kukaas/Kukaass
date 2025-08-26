@@ -16,6 +16,7 @@ export default function CreateProject() {
     description: string;
     link: string;
     githubLink: string;
+    isPrivate: boolean;
     images: string[];
     techStack: string[];
     features: string[];
@@ -30,6 +31,7 @@ export default function CreateProject() {
     description: '',
     link: '',
     githubLink: '',
+    isPrivate: false,
     images: [],
     techStack: [],
     features: [],
@@ -236,6 +238,19 @@ export default function CreateProject() {
                     className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
                     placeholder="https://github.com/username/repo"
                   />
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    id="isPrivate"
+                    checked={formData.isPrivate}
+                    onChange={(e) => setFormData({ ...formData, isPrivate: e.target.checked })}
+                    className="w-4 h-4 text-blue-600 bg-white/10 border-white/20 rounded focus:ring-blue-500 focus:ring-2"
+                  />
+                  <label htmlFor="isPrivate" className="text-sm font-medium text-gray-300">
+                    Private Repository
+                  </label>
                 </div>
               </div>
 

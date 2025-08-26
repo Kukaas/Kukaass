@@ -2,10 +2,11 @@
 
 import { useState, useEffect, use } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ExternalLink, Github, Code, Zap, Target, Lightbulb, Award } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Github, Code, Zap, Target, Lightbulb, Award, Lock } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import GlassCard from '@/components/GlassCard';
+import PrivateRepoAccess from '@/components/PrivateRepoAccess';
 
 interface Project {
   _id: string;
@@ -23,12 +24,14 @@ interface Project {
   role?: string;
   status: 'completed' | 'in-progress' | 'planned';
   createdAt: string | Date;
+  isPrivate?: boolean;
 }
 
 export default function ProjectDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showPrivateAccess, setShowPrivateAccess] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -148,17 +151,16 @@ export default function ProjectDetails({ params }: { params: Promise<{ id: strin
 
             <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto justify-end">
               {project.githubLink && (
-                <motion.a
-                  href={project.githubLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <motion.button
+                  onClick={() => project.isPrivate ? setShowPrivateAccess(true) : window.open(project.githubLink, '_blank', 'noopener,noreferrer')}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="flex items-center gap-1 sm:gap-2 text-gray-300 hover:text-white transition-colors duration-200"
                 >
                   <Github className="w-4 h-4 sm:w-5 sm:h-5" />
                   <span className="text-xs sm:text-sm hidden sm:inline">Code</span>
-                </motion.a>
+                  {project.isPrivate && <Lock className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400" />}
+                </motion.button>
               )}
               <motion.a
                 href={project.link}
@@ -459,17 +461,16 @@ export default function ProjectDetails({ params }: { params: Promise<{ id: strin
                       </motion.a>
 
                       {project.githubLink && (
-                        <motion.a
-                          href={project.githubLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <motion.button
+                          onClick={() => project.isPrivate ? setShowPrivateAccess(true) : window.open(project.githubLink, '_blank', 'noopener,noreferrer')}
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
-                                                     className="flex items-center justify-center gap-2 sm:gap-3 w-full bg-white/10 hover:bg-white/20 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg transition-colors duration-200 font-medium border border-white/20 text-sm sm:text-base"
+                          className="flex items-center justify-center gap-2 sm:gap-3 w-full bg-white/10 hover:bg-white/20 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg transition-colors duration-200 font-medium border border-white/20 text-sm sm:text-base"
                         >
                           <Github className="w-5 h-5" />
                           View Source Code
-                        </motion.a>
+                          {project.isPrivate && <Lock className="w-4 h-4 text-yellow-400" />}
+                        </motion.button>
                       )}
                     </div>
                   </div>
@@ -479,6 +480,35 @@ export default function ProjectDetails({ params }: { params: Promise<{ id: strin
           </div>
         </div>
       </div>
+
+                        {/* Private Repository Access Modal */}
+      {showPrivateAccess && project && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="w-full max-w-xs sm:max-w-sm"
+          >
+            <GlassCard className="p-4 sm:p-6 lg:p-8">
+              <div className="flex justify-end mb-2">
+                <button
+                  onClick={() => setShowPrivateAccess(false)}
+                  className="text-gray-400 hover:text-white transition-colors p-1 rounded-full hover:bg-white/10"
+                >
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <PrivateRepoAccess
+                repoUrl={project.githubLink || ''}
+                projectTitle={project.title}
+              />
+            </GlassCard>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
