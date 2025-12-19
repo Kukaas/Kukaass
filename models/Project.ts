@@ -136,9 +136,8 @@ ProjectSchema.set('toJSON', { virtuals: true });
 ProjectSchema.set('toObject', { virtuals: true });
 
 // Update the updatedAt field before saving
-ProjectSchema.pre('save', function(next) {
+ProjectSchema.pre('save', function() {
   this.updatedAt = new Date();
-  next();
 });
 
 export default mongoose.models.Project || mongoose.model('Project', ProjectSchema);
