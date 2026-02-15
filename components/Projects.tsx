@@ -24,10 +24,17 @@ export default function Projects() {
             <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 mx-auto rounded-full" />
           </motion.div>
 
-          <div className="grid grid-cols-1 gap-8">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-white/5 rounded-2xl h-80"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6 h-full animate-pulse">
+                <div className="aspect-video bg-white/10 rounded-xl mb-6"></div>
+                <div className="h-6 w-2/3 bg-white/10 rounded mb-4"></div>
+                <div className="h-4 w-full bg-white/10 rounded mb-2"></div>
+                <div className="h-4 w-5/6 bg-white/10 rounded mb-6"></div>
+                <div className="flex gap-4">
+                  <div className="h-4 w-20 bg-white/10 rounded"></div>
+                  <div className="h-4 w-20 bg-white/10 rounded"></div>
+                </div>
               </div>
             ))}
           </div>
@@ -86,13 +93,13 @@ export default function Projects() {
             <p className="text-gray-400 text-lg">No projects available yet.</p>
             <p className="text-gray-500 mt-2">Check back soon for updates!</p>
           </div>
-                 ) : (
-           <div className="grid grid-cols-1 gap-8">
-             {projects?.map((project: Project, index: number) => (
-               <ProjectCard key={project._id} project={project} index={index} />
-             ))}
-           </div>
-         )}
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {projects?.map((project: Project, index: number) => (
+              <ProjectCard key={project._id} project={project} index={index} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -24,9 +24,28 @@ export default function Experience() {
                         <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 mx-auto rounded-full" />
                     </motion.div>
 
-                    <div className="space-y-8">
+                    <div className="relative space-y-8">
+                        {/* Skeleton Timeline connector */}
+                        <div className="absolute left-0 top-0 bottom-0 w-px bg-white/10 sm:left-4" />
+
                         {[1, 2, 3].map((i) => (
-                            <div key={i} className="animate-pulse pl-12 h-32 bg-white/5 rounded-2xl" />
+                            <div key={i} className="relative pl-8 sm:pl-12 animate-pulse">
+                                {/* Skeleton Timeline dot */}
+                                <div className="absolute left-[-4px] top-0 w-2 h-2 rounded-full bg-white/10 sm:left-[12px] sm:w-3 sm:h-3" />
+
+                                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 h-32">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <div className="p-2 w-10 h-10 rounded-lg bg-white/10"></div>
+                                        <div className="space-y-2 flex-1">
+                                            <div className="h-5 bg-white/10 rounded w-1/3"></div>
+                                            <div className="h-4 bg-white/10 rounded w-1/4"></div>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <div className="h-4 bg-white/10 rounded w-full"></div>
+                                    </div>
+                                </div>
+                            </div>
                         ))}
                     </div>
                 </div>
