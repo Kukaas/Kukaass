@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.1] - 2026-02-16
+
+### Added
+- **Production Console Protection**:
+  - Implemented a "STOP!" security warning in the browser console for production environments.
+  - Disabled all `console` methods (`log`, `warn`, `error`, etc.) in production to prevent data leakage and deter "self-XSS" injection attacks.
+  - Used `Object.defineProperty` to lock console methods, making them difficult to re-enable manually.
+
 ## [2.0.0] - 2026-02-16
 
 ### Added
