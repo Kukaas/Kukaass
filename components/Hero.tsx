@@ -17,23 +17,14 @@ export default function Hero() {
     // A satisfying 1-second delay for smooth transitions
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    if (activeResume) {
-      const link = document.createElement('a');
-      link.href = activeResume.content;
-      link.download = `${activeResume.filename}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } else {
-      const link = document.createElement('a');
-      link.href = '/Maligaso, Chester Luke A.pdf';
-      link.download = 'Chester_Luke_Maligaso_CV.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+    try {
+      // Use the server-side download endpoint which is more robust for in-app browsers (Facebook, etc.)
+      window.location.href = '/api/resumes/active/download';
+    } catch (error) {
+      console.error('Download execution failed:', error);
+    } finally {
+      setIsDownloading(false);
     }
-
-    setIsDownloading(false);
   };
 
   const scrollToProjects = () => {
