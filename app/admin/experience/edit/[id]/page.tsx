@@ -18,6 +18,7 @@ export default function EditExperience() {
         company: '',
         role: '',
         location: '',
+        mapUrl: '',
         startDate: '',
         endDate: '',
         isCurrent: false,
@@ -32,6 +33,7 @@ export default function EditExperience() {
                     company: experience.company,
                     role: experience.role,
                     location: experience.location || '',
+                    mapUrl: experience.mapUrl || '',
                     startDate: new Date(experience.startDate).toISOString().split('T')[0],
                     endDate: experience.endDate ? new Date(experience.endDate).toISOString().split('T')[0] : '',
                     isCurrent: experience.isCurrent,
@@ -135,17 +137,31 @@ export default function EditExperience() {
                                 </div>
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">
-                                    Location
-                                </label>
-                                <input
-                                    type="text"
-                                    value={formData.location}
-                                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-colors"
-                                    placeholder="Location (e.g. Remote, Cebu City)"
-                                />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                                        Location
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={formData.location}
+                                        onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-colors"
+                                        placeholder="Location (e.g. Remote, Cebu City)"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                                        Map URL (Google Maps link)
+                                    </label>
+                                    <input
+                                        type="url"
+                                        value={formData.mapUrl}
+                                        onChange={(e) => setFormData({ ...formData, mapUrl: e.target.value })}
+                                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-colors"
+                                        placeholder="https://goo.gl/maps/..."
+                                    />
+                                </div>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

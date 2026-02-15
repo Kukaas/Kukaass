@@ -19,6 +19,10 @@ const ExperienceSchema = new mongoose.Schema({
         type: String,
         maxlength: [100, 'Location cannot be more than 100 characters'],
     },
+    mapUrl: {
+        type: String,
+        maxlength: [500, 'Map URL cannot be more than 500 characters'],
+    },
     startDate: {
         type: Date,
         required: [true, 'Please provide a start date.'],

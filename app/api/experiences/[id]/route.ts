@@ -4,11 +4,12 @@ import Experience from '@/models/Experience';
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await params;
         await dbConnect();
-        const experience = await Experience.findById(params.id);
+        const experience = await Experience.findById(id);
         if (!experience) {
             return NextResponse.json({ error: 'Experience not found' }, { status: 404 });
         }
@@ -20,9 +21,10 @@ export async function GET(
 
 export async function PUT(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await params;
         await dbConnect();
         const body = await request.json();
         const experienceData = { ...body };
@@ -38,7 +40,7 @@ export async function PUT(
         }
 
         const experience = await Experience.findByIdAndUpdate(
-            params.id,
+            id,
             experienceData,
             { new: true, runValidators: true }
         );
@@ -55,11 +57,12 @@ export async function PUT(
 
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await params;
         await dbConnect();
-        const experience = await Experience.findByIdAndDelete(params.id);
+        const experience = await Experience.findByIdAndDelete(id);
         if (!experience) {
             return NextResponse.json({ error: 'Experience not found' }, { status: 404 });
         }

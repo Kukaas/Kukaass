@@ -57,7 +57,18 @@ export default function ExperienceCard({ experience, index }: ExperienceCardProp
                             {experience.location && (
                                 <div className="flex items-center gap-1.5">
                                     <MapPin className="w-4 h-4 text-cyan-400" />
-                                    <span>{experience.location}</span>
+                                    {experience.mapUrl ? (
+                                        <a
+                                            href={experience.mapUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="hover:text-cyan-400 transition-colors cursor-pointer"
+                                        >
+                                            {experience.location}
+                                        </a>
+                                    ) : (
+                                        <span>{experience.location}</span>
+                                    )}
                                 </div>
                             )}
                         </div>

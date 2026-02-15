@@ -6,6 +6,7 @@ export interface Experience {
     role: string;
     description: string[];
     location?: string;
+    mapUrl?: string;
     startDate: string | Date;
     endDate?: string | Date;
     isCurrent: boolean;
