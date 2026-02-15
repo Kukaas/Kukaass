@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Edit, Trash2, Eye, Lock, Briefcase, FolderRoot } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, Lock, Briefcase, FolderRoot, FileText } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import GlassCard from '@/components/GlassCard';
@@ -12,13 +12,14 @@ import { useProjects, useDeleteProject, type Project } from '@/hooks/use-project
 import { useExperiences, useDeleteExperience, type Experience } from '@/hooks/use-experiences';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import ResumeManager from '@/components/admin/ResumeManager';
 
 export default function AdminDashboard() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState<'projects' | 'experiences'>('projects');
+  const [activeTab, setActiveTab] = useState<'projects' | 'experiences' | 'resumes'>('projects');
 
   const { data: projects = [], isLoading: projectsLoading } = useProjects();
   const { data: experiences = [], isLoading: experiencesLoading } = useExperiences();
@@ -115,13 +116,15 @@ export default function AdminDashboard() {
             <p className="text-gray-400">Manage your portfolio content</p>
           </div>
           <div className="flex gap-3">
-            <Button
-              onClick={() => router.push(activeTab === 'projects' ? '/admin/create' : '/admin/experience/create')}
-              className="bg-white text-black hover:bg-gray-100"
-            >
-              <Plus className="w-5 h-5 mr-2" />
-              Add {activeTab === 'projects' ? 'Project' : 'Experience'}
-            </Button>
+            {activeTab !== 'resumes' && (
+              <Button
+                onClick={() => router.push(activeTab === 'projects' ? '/admin/create' : '/admin/experience/create')}
+                className="bg-white text-black hover:bg-gray-100"
+              >
+                <Plus className="w-5 h-5 mr-2" />
+                Add {activeTab === 'projects' ? 'Project' : 'Experience'}
+              </Button>
+            )}
             <Button onClick={handleLogout} variant="outline" className="border-white/30 text-white hover:bg-white/5">
               Logout
             </Button>
@@ -149,6 +152,16 @@ export default function AdminDashboard() {
           >
             <Briefcase className="w-4 h-4" />
             Experiences
+          </button>
+          <button
+            onClick={() => setActiveTab('resumes')}
+            className={cn(
+              "flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
+              activeTab === 'resumes' ? "bg-white text-black shadow-lg" : "text-gray-400 hover:text-white"
+            )}
+          >
+            <FileText className="w-4 h-4" />
+            Resumes
           </button>
         </div>
 
@@ -200,7 +213,7 @@ export default function AdminDashboard() {
                   </GlassCard>
                 ))}
               </motion.div>
-            ) : (
+            ) : activeTab === 'experiences' ? (
               <motion.div
                 key="experiences"
                 initial={{ opacity: 0, x: -20 }}
@@ -250,6 +263,15 @@ export default function AdminDashboard() {
                     </div>
                   </GlassCard>
                 ))}
+              </motion.div>
+            ) : (
+              <motion.div
+                key="resumes"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+              >
+                <ResumeManager />
               </motion.div>
             )}
           </AnimatePresence>

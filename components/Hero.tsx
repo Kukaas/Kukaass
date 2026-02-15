@@ -1,9 +1,41 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Download } from 'lucide-react';
+import { ArrowRight, Download, Loader2 } from 'lucide-react';
+import { useActiveResume } from '@/hooks/use-resumes';
 
 export default function Hero() {
+  const { data: activeResume, isLoading: isQueryLoading } = useActiveResume();
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const isLoading = isQueryLoading || isDownloading;
+
+  const handleDownloadCV = async () => {
+    setIsDownloading(true);
+
+    // A satisfying 1-second delay for smooth transitions
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    if (activeResume) {
+      const link = document.createElement('a');
+      link.href = activeResume.content;
+      link.download = `${activeResume.filename}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      const link = document.createElement('a');
+      link.href = '/Maligaso, Chester Luke A.pdf';
+      link.download = 'Chester_Luke_Maligaso_CV.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    setIsDownloading(false);
+  };
+
   const scrollToProjects = () => {
     const element = document.querySelector('#projects');
     if (element) {
@@ -102,18 +134,16 @@ export default function Hero() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => {
-              const link = document.createElement('a');
-              link.href = '/Maligaso, Chester Luke A. - T.pdf';
-              link.download = 'Chester_Luke_Maligaso_CV.pdf';
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }}
-            className="border border-white/30 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-medium text-base sm:text-lg flex items-center gap-2 sm:gap-3 hover:bg-white/5 transition-all duration-300 backdrop-blur-sm w-full sm:w-auto justify-center"
+            onClick={handleDownloadCV}
+            disabled={isLoading}
+            className={`border border-white/30 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-medium text-base sm:text-lg flex items-center gap-2 sm:gap-3 hover:bg-white/5 transition-all duration-300 backdrop-blur-sm w-full sm:w-auto justify-center ${isLoading ? 'opacity-70 cursor-wait' : ''}`}
           >
-            <Download className="w-4 h-4 sm:w-5 sm:h-5" />
-            Download CV
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin text-blue-400" />
+            ) : (
+              <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+            )}
+            {isLoading ? 'Preparing...' : 'Download CV'}
           </motion.button>
         </motion.div>
       </div>
