@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Edit, Trash2, Eye, Lock, Briefcase, FolderRoot, FileText } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, Lock, Briefcase, FolderRoot, FileText, Settings } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import GlassCard from '@/components/GlassCard';
@@ -13,10 +13,11 @@ import { useExperiences, useDeleteExperience, type Experience } from '@/hooks/us
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import ResumeManager from '@/components/admin/ResumeManager';
+import AdminSettings from '../../components/admin/AdminSettings';
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'projects' | 'experiences' | 'resumes'>('projects');
+  const [activeTab, setActiveTab] = useState<'projects' | 'experiences' | 'resumes' | 'settings'>('projects');
 
   const { data: projects = [], isLoading: projectsLoading } = useProjects();
   const { data: experiences = [], isLoading: experiencesLoading } = useExperiences();
@@ -62,7 +63,7 @@ export default function AdminDashboard() {
             <p className="text-gray-400">Manage your portfolio content</p>
           </div>
           <div className="flex gap-3">
-            {activeTab !== 'resumes' && (
+            {activeTab !== 'resumes' && activeTab !== 'settings' && (
               <Button
                 onClick={() => router.push(activeTab === 'projects' ? '/admin/create' : '/admin/experience/create')}
                 className="bg-white text-black hover:bg-gray-100"
@@ -108,6 +109,16 @@ export default function AdminDashboard() {
           >
             <FileText className="w-4 h-4" />
             Resumes
+          </button>
+          <button
+            onClick={() => setActiveTab('settings')}
+            className={cn(
+              "flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
+              activeTab === 'settings' ? "bg-white text-black shadow-lg" : "text-gray-400 hover:text-white"
+            )}
+          >
+            <Settings className="w-4 h-4" />
+            Settings
           </button>
         </div>
 
@@ -209,6 +220,15 @@ export default function AdminDashboard() {
                     </div>
                   </GlassCard>
                 ))}
+              </motion.div>
+            ) : activeTab === 'settings' ? (
+              <motion.div
+                key="settings"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+              >
+                <AdminSettings />
               </motion.div>
             ) : (
               <motion.div
