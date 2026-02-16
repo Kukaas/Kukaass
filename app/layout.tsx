@@ -74,6 +74,9 @@ export const metadata: Metadata = {
   },
   verification: {
     google: "-TXhZVd-r4o9jU4MDbDqfFDGOX6axZ5I-doaLReJ5ec",
+    other: {
+      'msvalidate.01': 'C77691FD4D0CFBB0AE2FB1AE6C4C552F',
+    },
   },
   icons: {
     icon: [
@@ -111,6 +114,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <head>
         <meta name="google-site-verification" content="-TXhZVd-r4o9jU4MDbDqfFDGOX6axZ5I-doaLReJ5ec" />
+        <meta name="msvalidate.01" content="C77691FD4D0CFBB0AE2FB1AE6C4C552F" />
         <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
         <link rel="sitemap" type="application/xml" title="Sitemap" href="https://www.kukaass.app/sitemap.xml" />
         <meta name="robots" content="index, follow" />
