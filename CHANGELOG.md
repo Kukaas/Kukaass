@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2026-02-17
+
+### Added
+- **AI Chatbot Assistant**:
+  - **Google Generative AI Integration**: Implemented official `@google/generative-ai` SDK with `gemini-3-flash-preview` model.
+  - **Streaming Responses**: Real-time message streaming with custom `ReadableStream` implementation.
+  - **Markdown Support**: Rich text formatting using `react-markdown` with support for links, lists, bold text, and inline code.
+  - **Enhanced Context**: Comprehensive chatbot knowledge including:
+    - Full name and brand (Chester.dev)
+    - Education background (BS IT, MarSU 2024)
+    - Complete social media links (GitHub, LinkedIn, Facebook, Instagram)
+    - Work experience and project details from database
+  - **Multi-turn Conversations**: Proper conversation history handling with message format conversion.
+  - **Improved UI**: Thin 4px scrollbar with rounded edges and hover effects.
+
+### Changed
+- **API Route** (`app/api/chat/route.ts`):
+  - Replaced `@ai-sdk/google` with official `@google/generative-ai` SDK.
+  - Implemented custom streaming response handling.
+  - Added message format conversion to strip `type` field from parts for API compatibility.
+- **ChatWidget** (`components/ChatWidget.tsx`):
+  - Removed `useChat` hook dependency for manual streaming control.
+  - Added `react-markdown` for formatted message rendering.
+  - Implemented custom message state management and streaming logic.
+- **Context Loader** (`lib/context-loader.ts`):
+  - Added full name, brand, and education information.
+  - Updated social links with complete URLs.
+  - Added specific instructions for handling name and education queries.
+
+### Fixed
+- Model 404 errors by switching to `gemini-3-flash-preview`.
+- Multi-turn conversation errors by properly formatting message parts.
+- ReactMarkdown className prop error by wrapping in styled div.
+- TypeScript errors in message handling and form submission.
+
 ## [2.0.2] - 2026-02-16
 
 ### Added

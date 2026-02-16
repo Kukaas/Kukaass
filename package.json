@@ -2,6 +2,7 @@
   "name": "Kukaass",
   "version": "2.0.2",
   "private": true,
+  "repository": "https://github.com/Kukaas/Kukaass.git",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
