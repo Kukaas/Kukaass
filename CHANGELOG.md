@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.2] - 2026-02-16
+
+### Added
+- **Server-Side Admin Security Hardening**:
+  - **JWT Authentication**: Moved admin authentication from client-side to server-side using JSON Web Tokens (JWT).
+  - **Secure Session Management**: Implemented HTTP-only cookies for session storage, preventing client-side JavaScript access and potential token theft.
+  - **Global Route Protection**: Created a global `AdminLayout` to wrap all `/admin` routes, enforcing authentication before rendering any sub-page content.
+  - **API Middleware Protection**: Added `isAuthenticated` checks to all mutation API endpoints (POST, PUT, DELETE) for projects, experiences, and resumes.
+  - **Shared Auth Components**: Extracted `AdminLogin` for global reuse across the admin section.
+
+### Changed
+- **Secret Management**: Renamed `NEXT_PUBLIC_ADMIN_PASSWORD` to `ADMIN_PASSWORD` to prevent exposure in the client-side bundle.
+- **Environment Configuration**: Added `JWT_SECRET` for secure token signing.
+- **Admin Dashboard Cleanup**: Simplified the `AdminDashboard` component by removing redundant client-side authentication logic and adding a proper loading state to prevent UI flicker.
+
 ## [2.0.1] - 2026-02-16
 
 ### Added

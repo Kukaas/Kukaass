@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
 import Project from '@/models/Project';
+import { isAuthenticated } from '@/lib/auth-utils';
 
 export async function GET(
   request: NextRequest,
@@ -48,12 +49,16 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (!(await isAuthenticated())) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     await dbConnect();
     const { id } = await params;
     const body = await request.json();
 
-            // Convert date strings to Date objects
+    // Convert date strings to Date objects
     const updateData = { ...body };
 
     // Handle startDate - if not provided, use current date as fallback
@@ -96,6 +101,10 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (!(await isAuthenticated())) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     await dbConnect();
     const { id } = await params;
