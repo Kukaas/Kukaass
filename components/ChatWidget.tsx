@@ -16,12 +16,31 @@ export default function ChatWidget() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [input, setInput] = useState('');
+    const [isEnabled, setIsEnabled] = useState(true);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    // Check if chatbot is enabled
+    useEffect(() => {
+        const checkStatus = async () => {
+            try {
+                const res = await fetch('/api/settings');
+                const data = await res.json();
+                if (data.chatbot_enabled !== undefined) {
+                    setIsEnabled(data.chatbot_enabled);
+                }
+            } catch (error) {
+                console.error('Error checking chatbot status:', error);
+            }
+        };
+        checkStatus();
+    }, []);
 
     // Auto-scroll to bottom of messages
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
+
+    if (!isEnabled) return null;
 
     const toggleChat = () => setIsOpen(!isOpen);
 
