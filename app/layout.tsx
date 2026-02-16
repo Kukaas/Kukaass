@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     description: "Portfolio of Chester Luke A. Maligaso, a skilled full-stack developer specializing in MERN stack, Laravel, React, Node.js, and modern web solutions.",
   },
   verification: {
-    google: "Ji90_WE6M1rUzdy1bigGQjBUkw3kmwu8rVp-NDUCrkU",
+    google: "-TXhZVd-r4o9jU4MDbDqfFDGOX6axZ5I-doaLReJ5ec",
   },
   icons: {
     icon: [
@@ -101,7 +101,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        <meta name="google-site-verification" content="Ji90_WE6M1rUzdy1bigGQjBUkw3kmwu8rVp-NDUCrkU" />
+        <meta name="google-site-verification" content="-TXhZVd-r4o9jU4MDbDqfFDGOX6axZ5I-doaLReJ5ec" />
         <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
         <link rel="sitemap" type="application/xml" title="Sitemap" href="https://kukaass.vercel.app/sitemap.xml" />
         <meta name="robots" content="index, follow" />
