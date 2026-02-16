@@ -13,9 +13,10 @@ export default function Home() {
     "@type": "Person",
     "name": "Chester Luke A. Maligaso",
     "alternateName": ["Chester Maligaso", "Chester Luke", "Kukaass"],
-    "jobTitle": "Full-stack Developer",
-    "description": "Full-stack developer specializing in MERN stack, Laravel, React, Node.js, and modern web solutions",
+    "jobTitle": "Full-Stack Software Developer",
+    "description": "Full-Stack Developer specializing in MERN stack, Laravel, React, Node.js, and modern web solutions. Based in the Philippines.",
     "url": "https://kukaass.vercel.app",
+    "image": "https://kukaass.vercel.app/logo.jpeg",
     "sameAs": [
       "https://github.com/Kukaas",
       "https://www.linkedin.com/in/chester-luke-maligaso-812732359",
@@ -24,6 +25,8 @@ export default function Home() {
       "https://www.instagram.com/itsmechester_/"
     ],
     "knowsAbout": [
+      "Software Engineering",
+      "Full-Stack Development",
       "MERN Stack",
       "Laravel",
       "React",
@@ -34,13 +37,21 @@ export default function Home() {
       "MongoDB",
       "MySQL",
       "Next.js",
-      "Web Development",
-      "Full-stack Development"
+      "REST APIs",
+      "Database Design"
     ],
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Freelance / Open for Opportunities"
+    },
     "hasOccupation": {
       "@type": "Occupation",
-      "name": "Full-stack Developer",
-      "description": "Developing modern web applications using various technologies and frameworks"
+      "name": "Software Developer",
+      "occupationLocation": {
+        "@type": "City",
+        "name": "Manila"
+      },
+      "skills": "React, Node.js, Laravel, MongoDB, SQL"
     }
   };
 
