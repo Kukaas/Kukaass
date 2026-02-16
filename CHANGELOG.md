@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.1] - 2026-02-17
+
+### Added
+- **Admin Settings Feature**:
+  - **Feature Toggle**: Implemented a global settings system to enable/disable the AI chatbot from the admin dashboard.
+  - **Admin UI**: Added a new "Settings" tab in the Admin Dashboard with a real-time toggle switch.
+  - **Settings API**: Created `models/Settings.ts` and `app/api/settings` endpoint for managing application configuration.
+  - **Conditional Rendering**: Updated `ChatWidget` to respect the global `chatbot_enabled` setting.
+
+### Changed
+- **Model Upgrade**: Switched from `gemini-3-flash-preview` to `gemini-2.0-flash` for better rate limits and performance.
+- **API Authentication**: Refactored `app/api/settings/route.ts` to use shared `isAuthenticated` utility to fix 401 errors.
+- **Component Restructure**: Renamed `AdminSettings` to `SettingsTab` to resolve import path conflicts.
+
 ## [2.1.0] - 2026-02-17
 
 ### Added
