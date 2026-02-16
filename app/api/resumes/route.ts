@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
 import Resume from '@/models/Resume';
+import { isAuthenticated } from '@/lib/auth-utils';
 
 // GET all resumes or just the active one
 export async function GET(request: NextRequest) {
@@ -35,6 +36,10 @@ export async function GET(request: NextRequest) {
 
 // POST a new resume (Base64)
 export async function POST(request: NextRequest) {
+    if (!(await isAuthenticated())) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     try {
         await dbConnect();
         const body = await request.json();

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
 import Project from '@/models/Project';
+import { isAuthenticated } from '@/lib/auth-utils';
 
 export async function GET() {
   try {
@@ -37,11 +38,15 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  if (!(await isAuthenticated())) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     await dbConnect();
     const body = await request.json();
 
-            // Convert date strings to Date objects
+    // Convert date strings to Date objects
     const projectData = { ...body };
 
     // Handle startDate - if not provided, use current date as fallback

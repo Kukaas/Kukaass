@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
 import Experience from '@/models/Experience';
+import { isAuthenticated } from '@/lib/auth-utils';
 
 export async function GET(
     request: NextRequest,
@@ -23,6 +24,10 @@ export async function PUT(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
+    if (!(await isAuthenticated())) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     try {
         const { id } = await params;
         await dbConnect();
@@ -59,6 +64,10 @@ export async function DELETE(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
+    if (!(await isAuthenticated())) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     try {
         const { id } = await params;
         await dbConnect();

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Edit, Trash2, Eye, Lock, Briefcase, FolderRoot, FileText } from 'lucide-react';
 import Image from 'next/image';
@@ -16,9 +16,6 @@ import ResumeManager from '@/components/admin/ResumeManager';
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState<'projects' | 'experiences' | 'resumes'>('projects');
 
   const { data: projects = [], isLoading: projectsLoading } = useProjects();
@@ -26,27 +23,6 @@ export default function AdminDashboard() {
 
   const deleteProjectMutation = useDeleteProject();
   const deleteExperienceMutation = useDeleteExperience();
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
-
-    if (password === adminPassword) {
-      setIsAuthenticated(true);
-      setError('');
-      sessionStorage.setItem('adminAuthenticated', 'true');
-    } else {
-      setError('Incorrect password');
-      setPassword('');
-    }
-  };
-
-  useEffect(() => {
-    const authenticated = sessionStorage.getItem('adminAuthenticated');
-    if (authenticated === 'true') {
-      setIsAuthenticated(true);
-    }
-  }, []);
 
   const handleDeleteProject = async (id: string) => {
     if (!confirm('Are you sure you want to delete this project?')) return;
@@ -66,44 +42,14 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    sessionStorage.removeItem('adminAuthenticated');
-    setPassword('');
-    setError('');
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      window.location.reload(); // Refresh to trigger layout re-check
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
   };
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center p-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
-          <GlassCard>
-            <div className="text-center mb-6">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-white/10 rounded-full mb-4">
-                <Lock className="w-8 h-8 text-white" />
-              </div>
-              <h1 className="text-2xl font-bold text-white">Admin Access</h1>
-              <p className="text-gray-400 mt-2">Enter password to continue</p>
-            </div>
-            <form onSubmit={handleLogin} className="space-y-4">
-              <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password"
-                className="w-full bg-white/10 border-white/20 text-white placeholder-gray-400 focus:border-white/40"
-                required
-              />
-              {error && <p className="text-red-400 text-sm text-center">{error}</p>}
-              <Button type="submit" className="w-full bg-white text-black hover:bg-gray-100">
-                Access Admin
-              </Button>
-            </form>
-          </GlassCard>
-        </motion.div>
-      </div>
-    );
-  }
 
   const loading = projectsLoading || experiencesLoading;
 

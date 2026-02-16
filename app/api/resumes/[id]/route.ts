@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
 import Resume from '@/models/Resume';
+import { isAuthenticated } from '@/lib/auth-utils';
 
 // PATCH to update resume details or toggle isActive
 export async function PATCH(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
+    if (!(await isAuthenticated())) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     try {
         await dbConnect();
         const { id } = await params;
@@ -40,6 +45,10 @@ export async function DELETE(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
+    if (!(await isAuthenticated())) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     try {
         await dbConnect();
         const { id } = await params;
