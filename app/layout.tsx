@@ -4,6 +4,7 @@ import "./globals.css";
 import Providers from "./providers";
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import ChatWidget from "@/components/ChatWidget";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -131,6 +132,7 @@ export default function RootLayout({
         </Providers>
         <Analytics />
         <SpeedInsights />
+        <ChatWidget />
       </body>
     </html>
   );
