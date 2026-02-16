@@ -1,45 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<script type="text/javascript" src="chrome-extension://ibniinmoafhgbifjojidlagmggecmpgf/dist/inject.js"/>
-<url>
-<loc>https://kukaass.vercel.app</loc>
-<lastmod>2026-02-16T21:06:29.948Z</lastmod>
-<changefreq>weekly</changefreq>
-<priority>1</priority>
-</url>
-<url>
-<loc>https://kukaass.vercel.app/projects</loc>
-<lastmod>2026-02-16T21:06:29.948Z</lastmod>
-<changefreq>weekly</changefreq>
-<priority>0.8</priority>
-</url>
-<url>
-<loc>https://kukaass.vercel.app/contact</loc>
-<lastmod>2026-02-16T21:06:29.948Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.6</priority>
-</url>
-<url>
-<loc>https://kukaass.vercel.app/projects/68e5066cd744c1cbc5999b83</loc>
-<lastmod>2025-10-07T12:24:12.637Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://kukaass.vercel.app/projects/68acb7a6e6822e69e8764b95</loc>
-<lastmod>2026-02-16T21:06:32.663Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://kukaass.vercel.app/projects/68acbbeec1acd289aae1e89c</loc>
-<lastmod>2026-02-16T21:06:32.663Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://kukaass.vercel.app/projects/68acbec2c1acd289aae1e8af</loc>
-<lastmod>2026-02-16T21:06:32.663Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
+   <url>
+      <loc>https://www.kukaass.app/</loc>
+      <lastmod>2026-02-17</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>1.0</priority>
+   </url>
+   <url>
+      <loc>https://www.kukaass.app/projects</loc>
+      <lastmod>2026-02-17</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://www.kukaass.app/contact</loc>
+      <lastmod>2026-02-17</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.6</priority>
+   </url>
 </urlset>

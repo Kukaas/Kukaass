@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Chester Luke A. Maligaso Portfolio",
-    url: "https://kukaass.vercel.app",
+    url: "https://www.kukaass.app",
     images: [
       {
         url: "/logo.jpeg",
@@ -97,9 +97,9 @@ export const metadata: Metadata = {
     ],
   },
   alternates: {
-    canonical: "https://kukaass.vercel.app/",
+    canonical: "https://www.kukaass.app/",
   },
-  metadataBase: new URL('https://kukaass.vercel.app'),
+  metadataBase: new URL('https://www.kukaass.app'),
 };
 
 export default function RootLayout({
@@ -112,11 +112,11 @@ export default function RootLayout({
       <head>
         <meta name="google-site-verification" content="-TXhZVd-r4o9jU4MDbDqfFDGOX6axZ5I-doaLReJ5ec" />
         <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
-        <link rel="sitemap" type="application/xml" title="Sitemap" href="https://kukaass.vercel.app/sitemap.xml" />
+        <link rel="sitemap" type="application/xml" title="Sitemap" href="https://www.kukaass.app/sitemap.xml" />
         <meta name="robots" content="index, follow" />
         <meta name="googlebot" content="index, follow" />
         <meta name="googlebot-news" content="nosnippet" />
-        <link rel="canonical" href="https://kukaass.vercel.app/" />
+        <link rel="canonical" href="https://www.kukaass.app/" />
 
         {/* Favicon links for better browser and search engine support */}
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
