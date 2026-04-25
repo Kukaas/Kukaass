@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 import ConsoleProtection from '@/components/ConsoleProtection';
+import PostHogProvider from '@/components/PostHogProvider';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -20,9 +21,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ConsoleProtection />
-      {children}
-    </QueryClientProvider>
+    <PostHogProvider>
+      <QueryClientProvider client={queryClient}>
+        <ConsoleProtection />
+        {children}
+      </QueryClientProvider>
+    </PostHogProvider>
   );
 }
