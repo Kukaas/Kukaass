@@ -1,7 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import ProjectCard from './ProjectCard';
+import SectionHeading from './SectionHeading';
 import { useProjects, type Project } from '@/hooks/use-projects';
 
 export default function Projects() {
@@ -11,29 +11,18 @@ export default function Projects() {
     return (
       <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
-              My Projects
-            </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 mx-auto rounded-full" />
-          </motion.div>
+          <SectionHeading title="My Projects" className="mb-16" />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6 h-full animate-pulse">
-                <div className="aspect-video bg-white/10 rounded-xl mb-6"></div>
-                <div className="h-6 w-2/3 bg-white/10 rounded mb-4"></div>
-                <div className="h-4 w-full bg-white/10 rounded mb-2"></div>
-                <div className="h-4 w-5/6 bg-white/10 rounded mb-6"></div>
+              <div key={i} className="bg-card border border-border rounded-xl p-6 h-full animate-pulse">
+                <div className="aspect-video bg-muted rounded-xl mb-6"></div>
+                <div className="h-6 w-2/3 bg-muted rounded mb-4"></div>
+                <div className="h-4 w-full bg-muted rounded mb-2"></div>
+                <div className="h-4 w-5/6 bg-muted rounded mb-6"></div>
                 <div className="flex gap-4">
-                  <div className="h-4 w-20 bg-white/10 rounded"></div>
-                  <div className="h-4 w-20 bg-white/10 rounded"></div>
+                  <div className="h-4 w-20 bg-muted rounded"></div>
+                  <div className="h-4 w-20 bg-muted rounded"></div>
                 </div>
               </div>
             ))}
@@ -47,22 +36,11 @@ export default function Projects() {
     return (
       <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
-              My Projects
-            </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 mx-auto rounded-full" />
-          </motion.div>
+          <SectionHeading title="My Projects" className="mb-16" />
 
           <div className="text-center">
-            <p className="text-red-400 text-lg">{error.message}</p>
-            <p className="text-gray-400 mt-2">Please try again later.</p>
+            <p className="text-destructive text-lg">{error.message}</p>
+            <p className="text-muted-foreground mt-2">Please try again later.</p>
           </div>
         </div>
       </section>
@@ -72,26 +50,16 @@ export default function Projects() {
   return (
     <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
-            My Projects
-          </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 mx-auto rounded-full" />
-          <p className="text-gray-400 mt-6 max-w-2xl mx-auto">
-            Explore my latest work showcasing full-stack development, modern web applications, and innovative solutions.
-          </p>
-        </motion.div>
+        <SectionHeading
+          title="My Projects"
+          subtitle="A selection of full-stack apps and web projects I have designed, built, and shipped."
+          className="mb-16"
+        />
 
         {projects?.length === 0 ? (
           <div className="text-center">
-            <p className="text-gray-400 text-lg">No projects available yet.</p>
-            <p className="text-gray-500 mt-2">Check back soon for updates!</p>
+            <p className="text-muted-foreground text-lg">No projects available yet.</p>
+            <p className="text-muted-foreground/80 mt-2">Check back soon for updates.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

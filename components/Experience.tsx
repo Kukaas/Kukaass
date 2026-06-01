@@ -1,7 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import ExperienceCard from './ExperienceCard';
+import SectionHeading from './SectionHeading';
 import { useExperiences } from '@/hooks/use-experiences';
 
 export default function Experience() {
@@ -11,38 +11,27 @@ export default function Experience() {
         return (
             <section id="experience" className="py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
                 <div className="max-w-4xl mx-auto">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                        viewport={{ once: true }}
-                        className="text-center mb-16"
-                    >
-                        <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
-                            Experience
-                        </h2>
-                        <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 mx-auto rounded-full" />
-                    </motion.div>
+                    <SectionHeading title="Work Experience" className="mb-16" />
 
                     <div className="relative space-y-8">
-                        {/* Skeleton Timeline connector */}
-                        <div className="absolute left-0 top-0 bottom-0 w-px bg-white/10 sm:left-4" />
+                        {/* Skeleton timeline connector */}
+                        <div className="absolute left-0 top-0 bottom-0 w-px bg-border sm:left-4" />
 
                         {[1, 2, 3].map((i) => (
                             <div key={i} className="relative pl-8 sm:pl-12 animate-pulse">
-                                {/* Skeleton Timeline dot */}
-                                <div className="absolute left-[-4px] top-0 w-2 h-2 rounded-full bg-white/10 sm:left-[12px] sm:w-3 sm:h-3" />
+                                {/* Skeleton timeline dot */}
+                                <div className="absolute left-[-4px] top-0 w-2 h-2 rounded-full bg-border sm:left-[12px] sm:w-3 sm:h-3" />
 
-                                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 h-32">
+                                <div className="bg-card border border-border rounded-xl p-6 h-32">
                                     <div className="flex items-center gap-3 mb-4">
-                                        <div className="p-2 w-10 h-10 rounded-lg bg-white/10"></div>
+                                        <div className="p-2 w-10 h-10 rounded-lg bg-muted"></div>
                                         <div className="space-y-2 flex-1">
-                                            <div className="h-5 bg-white/10 rounded w-1/3"></div>
-                                            <div className="h-4 bg-white/10 rounded w-1/4"></div>
+                                            <div className="h-5 bg-muted rounded w-1/3"></div>
+                                            <div className="h-4 bg-muted rounded w-1/4"></div>
                                         </div>
                                     </div>
                                     <div className="space-y-2">
-                                        <div className="h-4 bg-white/10 rounded w-full"></div>
+                                        <div className="h-4 bg-muted rounded w-full"></div>
                                     </div>
                                 </div>
                             </div>
@@ -57,7 +46,7 @@ export default function Experience() {
         return (
             <section id="experience" className="py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
                 <div className="max-w-4xl mx-auto text-center">
-                    <p className="text-red-400">Failed to load experience data.</p>
+                    <p className="text-destructive">Failed to load experience data.</p>
                 </div>
             </section>
         );
@@ -66,21 +55,11 @@ export default function Experience() {
     return (
         <section id="experience" className="py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
             <div className="max-w-4xl mx-auto">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    viewport={{ once: true }}
-                    className="text-center mb-16"
-                >
-                    <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
-                        Work Experience
-                    </h2>
-                    <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 mx-auto rounded-full" />
-                    <p className="text-gray-400 mt-6 max-w-2xl mx-auto">
-                        My professional journey and the companies that helped me grow as a developer.
-                    </p>
-                </motion.div>
+                <SectionHeading
+                    title="Work Experience"
+                    subtitle="The roles and teams I have built with along the way."
+                    className="mb-16"
+                />
 
                 <div className="relative">
                     {experiences && experiences.length > 0 ? (
@@ -91,7 +70,7 @@ export default function Experience() {
                         </div>
                     ) : (
                         <div className="text-center">
-                            <p className="text-gray-400">No experience added yet.</p>
+                            <p className="text-muted-foreground">No experience added yet.</p>
                         </div>
                     )}
                 </div>

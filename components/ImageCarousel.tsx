@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import Image from 'next/image';
 import GlassCard from './GlassCard';
+import { viewTransitionStyle } from '@/hooks/use-view-transition-router';
 
 // Custom CSS for hiding scrollbar
 const scrollbarHideStyles = `
@@ -21,9 +22,19 @@ interface ImageCarouselProps {
   images: string[];
   title: string;
   className?: string;
+  /** view-transition-name for the hero image box, to morph from a project card. */
+  heroViewTransitionName?: string;
+  /** Stable id for the shared hero element, used as a wait target. */
+  heroId?: string;
 }
 
-export default function ImageCarousel({ images, title, className = '' }: ImageCarouselProps) {
+export default function ImageCarousel({
+  images,
+  title,
+  className = '',
+  heroViewTransitionName,
+  heroId,
+}: ImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -53,7 +64,11 @@ export default function ImageCarousel({ images, title, className = '' }: ImageCa
       {/* Main Carousel */}
       <div className={`relative ${className}`}>
         <GlassCard>
-          <div className="relative overflow-hidden rounded-xl aspect-video sm:aspect-video">
+          <div
+            data-vt-image={heroId}
+            style={viewTransitionStyle(heroViewTransitionName)}
+            className="relative overflow-hidden rounded-xl aspect-video sm:aspect-video"
+          >
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentIndex}
@@ -125,8 +140,8 @@ export default function ImageCarousel({ images, title, className = '' }: ImageCa
                   onClick={() => goToImage(index)}
                   className={`flex-shrink-0 relative overflow-hidden rounded-lg border-2 transition-all duration-200 ${
                     index === currentIndex
-                      ? 'border-blue-400 scale-105'
-                      : 'border-white/20 hover:border-white/40'
+                      ? 'border-brand scale-105'
+                      : 'border-border hover:border-foreground/40'
                   }`}
                 >
                   <Image

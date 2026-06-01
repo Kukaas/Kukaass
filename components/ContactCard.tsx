@@ -1,75 +1,56 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Mail, Github, Facebook, Instagram, ExternalLink } from 'lucide-react';
 import GlassCard from './GlassCard';
 
 const socialLinks = [
-  {
-    name: 'Email',
-    href: 'mailto:maligaso.chesterlukea@gmail.com',
-    icon: Mail,
-    color: 'text-red-400 hover:text-red-300',
-  },
-  {
-    name: 'GitHub',
-    href: 'https://github.com/Kukaas',
-    icon: Github,
-    color: 'text-gray-400 hover:text-gray-300',
-  },
-  {
-    name: 'Facebook',
-    href: 'https://www.facebook.com/kukaass.dev/',
-    icon: Facebook,
-    color: 'text-blue-400 hover:text-blue-300',
-  },
-  {
-    name: 'Instagram',
-    href: 'https://www.instagram.com/itsmechester_/',
-    icon: Instagram,
-    color: 'text-pink-400 hover:text-pink-300',
-  },
+  { name: 'Email', href: 'mailto:maligaso.chesterlukea@gmail.com', icon: Mail },
+  { name: 'GitHub', href: 'https://github.com/Kukaas', icon: Github },
+  { name: 'Facebook', href: 'https://www.facebook.com/kukaass.dev/', icon: Facebook },
+  { name: 'Instagram', href: 'https://www.instagram.com/itsmechester_/', icon: Instagram },
 ];
 
 export default function ContactCard() {
+  const reduce = useReducedMotion();
+
   return (
     <GlassCard className="max-w-md mx-auto p-6 sm:p-8">
       <div className="text-center space-y-6 sm:space-y-8">
         <div>
-          <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
-            Get In Touch
+          <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-3">
+            Get in touch
           </h3>
-          <p className="text-sm sm:text-base text-gray-400 leading-relaxed">
-            Let&apos;s work together on your next project
+          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+            Let&apos;s work together on your next project.
           </p>
         </div>
 
-        <div className="space-y-3 sm:space-y-4">
+        <div className="space-y-3">
           {socialLinks.map((link, index) => (
             <motion.a
               key={link.name}
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              initial={reduce ? false : { opacity: 0, x: -16 }}
+              whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
+              transition={{ duration: 0.45, delay: index * 0.08, ease: [0.25, 1, 0.5, 1] }}
               viewport={{ once: true }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={`flex items-center justify-between p-3 sm:p-4 rounded-lg sm:rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300 group ${link.color}`}
+              className="flex items-center justify-between p-4 rounded-lg border border-border bg-card hover:bg-accent hover:border-foreground/20 transition-colors duration-300 group text-foreground outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
             >
-              <div className="flex items-center gap-3 sm:gap-4">
-                <link.icon className="w-4 h-4 sm:w-5 sm:h-5" />
+              <div className="flex items-center gap-4">
+                <link.icon className="size-5 text-muted-foreground group-hover:text-foreground transition-colors" aria-hidden="true" />
                 <span className="font-medium text-sm sm:text-base">{link.name}</span>
               </div>
-              <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <ExternalLink className="size-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true" />
             </motion.a>
           ))}
         </div>
 
-        <div className="pt-4 sm:pt-6 border-t border-white/10">
-          <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
-            Available for freelance opportunities and full-time positions
+        <div className="pt-4 sm:pt-6 border-t border-border">
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Available for freelance projects and full-time roles.
           </p>
         </div>
       </div>

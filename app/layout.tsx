@@ -1,16 +1,65 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import "./globals.css";
 import Providers from "./providers";
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import ChatWidget from "@/components/ChatWidget";
+import './globals.css'
 
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
+
+// Person structured data. Rendered server-side in <head> so it stays stable and
+// does not collide with client-injected third-party scripts during hydration.
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Chester Luke A. Maligaso",
+  "alternateName": ["Chester Maligaso", "Chester Luke", "Kukaass"],
+  "jobTitle": "Full-Stack Software Developer",
+  "description": "Full-Stack Developer specializing in MERN stack, Laravel, React, Node.js, and modern web solutions. Based in the Philippines.",
+  "url": "https://kukaass.vercel.app",
+  "image": "https://kukaass.vercel.app/logo.jpeg",
+  "sameAs": [
+    "https://github.com/Kukaas",
+    "https://www.linkedin.com/in/chester-luke-maligaso-812732359",
+    "https://www.facebook.com/kukaass.dev/",
+    "https://www.tiktok.com/@kukaassdev",
+    "https://www.instagram.com/itsmechester_/"
+  ],
+  "knowsAbout": [
+    "Software Engineering",
+    "Full-Stack Development",
+    "MERN Stack",
+    "Laravel",
+    "React",
+    "Node.js",
+    "JavaScript",
+    "TypeScript",
+    "PHP",
+    "MongoDB",
+    "MySQL",
+    "Next.js",
+    "REST APIs",
+    "Database Design"
+  ],
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Freelance / Open for Opportunities"
+  },
+  "hasOccupation": {
+    "@type": "Occupation",
+    "name": "Software Developer",
+    "occupationLocation": {
+      "@type": "City",
+      "name": "Manila"
+    },
+    "skills": "React, Node.js, Laravel, MongoDB, SQL"
+  }
+};
 
 export const metadata: Metadata = {
   title: "Chester Luke A. Maligaso (Kukaass) | Full-Stack Software Developer",
@@ -113,6 +162,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
         <meta name="google-site-verification" content="-TXhZVd-r4o9jU4MDbDqfFDGOX6axZ5I-doaLReJ5ec" />
         <meta name="msvalidate.01" content="C77691FD4D0CFBB0AE2FB1AE6C4C552F" />
         <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />

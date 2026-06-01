@@ -1,8 +1,9 @@
 'use client';
 
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useAnimation, useReducedMotion } from 'framer-motion';
 import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
+import SectionHeading from './SectionHeading';
 
 interface TechItem {
   name: string;
@@ -50,6 +51,7 @@ export default function TechStack() {
   const containerRef = useRef<HTMLDivElement>(null);
   const positionRef = useRef(0);
   const [isMobile, setIsMobile] = useState(false);
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     // Duplicate the stack multiple times for infinite scroll effect
@@ -70,6 +72,10 @@ export default function TechStack() {
   }, []);
 
   useEffect(() => {
+    if (reduce) {
+      controls.stop();
+      return;
+    }
     if (!isPaused) {
       controls.start({
         x: [positionRef.current, -50 * duplicatedStack.length],
@@ -82,7 +88,7 @@ export default function TechStack() {
     } else {
       controls.stop();
     }
-  }, [controls, duplicatedStack.length, isPaused]);
+  }, [controls, duplicatedStack.length, isPaused, reduce]);
 
   const handleMouseEnter = () => {
     // Only pause on desktop (non-mobile)
@@ -107,26 +113,16 @@ export default function TechStack() {
   return (
          <section id="tech-stack" className="py-12 sm:py-16 lg:py-20 px-2 sm:px-4 lg:px-8 overflow-hidden">
        <div className="w-full sm:w-[95%] max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-                     className="text-center mb-8 sm:mb-12 lg:mb-16"
-        >
-                     <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-4 sm:mb-6 lg:mb-8">
-             Tech Stack
-           </h2>
-           <div className="w-12 sm:w-16 lg:w-20 xl:w-24 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 mx-auto rounded-full" />
-           <p className="text-xs sm:text-sm lg:text-base text-gray-400 mt-4 sm:mt-6 lg:mt-8 max-w-3xl mx-auto leading-relaxed px-2 sm:px-0">
-            Technologies and tools I use to build modern, scalable applications
-          </p>
-        </motion.div>
+        <SectionHeading
+          title="Tech Stack"
+          subtitle="The technologies and tools I reach for to build and ship web applications."
+          className="mb-8 sm:mb-12 lg:mb-16"
+        />
 
         <div className="relative">
-          {/* Gradient overlays for smooth fade effect */}
-          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-gray-900 to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-gray-900 to-transparent z-10 pointer-events-none" />
+          {/* Fade overlays so logos enter and leave the strip cleanly. */}
+          <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
           {/* Hybrid scroll container */}
           <div
@@ -143,16 +139,12 @@ export default function TechStack() {
               {duplicatedStack.map((tech, index) => (
                 <motion.div
                   key={`${tech.name}-${index}`}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  whileHover={{ scale: 1.05, y: -5 }}
+                  whileHover={reduce ? undefined : { y: -4 }}
                   className="flex flex-col items-center gap-3 sm:gap-4 min-w-[80px] sm:min-w-[100px] lg:min-w-[120px] group"
                 >
                   <div className="relative">
                     <div
-                      className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl flex items-center justify-center p-2 sm:p-3 border border-white/20 group-hover:border-white/40 transition-all duration-300"
+                      className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bg-card rounded-xl sm:rounded-2xl flex items-center justify-center p-2 sm:p-3 border border-border group-hover:border-foreground/30 transition-colors duration-300"
                       data-tech={`${tech.name}-${index}`}
                     >
                                              <Image
@@ -175,10 +167,10 @@ export default function TechStack() {
                     </div>
                   </div>
                   <div className="text-center">
-                    <p className="text-xs sm:text-sm font-medium text-white group-hover:text-blue-400 transition-colors duration-300">
+                    <p className="text-xs sm:text-sm font-medium text-foreground group-hover:text-brand transition-colors duration-300">
                       {tech.name}
                     </p>
-                    <p className="text-xs text-gray-500 group-hover:text-gray-400 transition-colors duration-300">
+                    <p className="text-xs text-muted-foreground transition-colors duration-300">
                       {tech.category}
                     </p>
                   </div>

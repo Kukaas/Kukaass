@@ -1,24 +1,26 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, Download, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useActiveResume } from '@/hooks/use-resumes';
 
 export default function Hero() {
-  const { data: activeResume, isLoading: isQueryLoading } = useActiveResume();
+  const { isLoading: isQueryLoading } = useActiveResume();
   const [isDownloading, setIsDownloading] = useState(false);
+  const reduce = useReducedMotion();
 
   const isLoading = isQueryLoading || isDownloading;
 
   const handleDownloadCV = async () => {
     setIsDownloading(true);
 
-    // A satisfying 1-second delay for smooth transitions
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // A short delay so the loading state reads before the navigation.
+    await new Promise((resolve) => setTimeout(resolve, 800));
 
     try {
-      // Use the server-side download endpoint which is more robust for in-app browsers (Facebook, etc.)
+      // The server-side endpoint is more robust for in-app browsers (Facebook, etc.).
       window.location.href = '/api/resumes/active/download';
     } catch (error) {
       console.error('Download execution failed:', error);
@@ -28,114 +30,85 @@ export default function Hero() {
   };
 
   const scrollToProjects = () => {
-    const element = document.querySelector('#projects');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    document.querySelector('#projects')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
   };
 
+  const rise = (delay: number) =>
+    reduce
+      ? {}
+      : {
+          initial: { opacity: 0, y: 20 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.7, delay, ease: [0.25, 1, 0.5, 1] as const },
+        };
+
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16 sm:pt-20 lg:pt-24">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900/20 via-slate-900/20 to-black" />
-
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 180, 360],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-          className="absolute top-1/4 left-1/4 w-48 h-48 sm:w-64 sm:h-64 lg:w-96 lg:h-96 bg-blue-500/10 rounded-full blur-2xl sm:blur-3xl pointer-events-none"
-        />
-        <motion.div
-          animate={{
-            scale: [1.2, 1, 1.2],
-            rotate: [360, 180, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-          className="absolute bottom-1/4 right-1/4 w-48 h-48 sm:w-64 sm:h-64 lg:w-96 lg:h-96 bg-cyan-500/10 rounded-full blur-2xl sm:blur-3xl pointer-events-none"
-        />
-      </div>
-
-      <div className="relative z-10 text-center w-[95%] sm:w-[90%] max-w-4xl mx-auto px-3 sm:px-4 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="mb-6 sm:mb-8"
-        >
-          <h2 className="text-base sm:text-lg lg:text-xl text-blue-300 font-medium mb-4 sm:mb-6">
-            Hello, I&apos;m
-          </h2>
+    <section
+      id="home"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16 sm:pt-20 lg:pt-24"
+    >
+      <div className="relative z-10 text-center w-[95%] sm:w-[90%] max-w-3xl mx-auto px-3 sm:px-4 lg:px-8">
+        <motion.div {...rise(0)} className="mb-6 flex justify-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium tracking-wide text-muted-foreground">
+            <span className="relative flex h-2 w-2" aria-hidden="true">
+              {!reduce && (
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-60" />
+              )}
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-brand" />
+            </span>
+            Open to roles &amp; freelance work
+          </span>
         </motion.div>
 
+        <motion.p {...rise(0.05)} className="text-sm sm:text-base text-muted-foreground mb-3">
+          Hello, I&apos;m
+        </motion.p>
+
         <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-6 sm:mb-8 leading-tight"
+          {...rise(0.1)}
+          className="text-4xl sm:text-6xl lg:text-7xl font-bold text-foreground leading-[1.05] tracking-[-0.02em] mb-6"
+          style={{ textWrap: 'balance' }}
         >
-          Chester Luke A.
-          <span className="block bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-            Maligaso
-          </span>
+          Chester Luke A. Maligaso
         </motion.h1>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mb-8 sm:mb-12"
-        >
-          <h3 className="text-lg sm:text-xl lg:text-2xl text-gray-300 font-medium mb-4 sm:mb-6">
+        <motion.div {...rise(0.2)} className="mb-9 sm:mb-12">
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-foreground mb-4">
             Full-stack Developer
-          </h3>
-          <p className="text-sm sm:text-base lg:text-lg text-gray-400 max-w-3xl mx-auto leading-relaxed px-2 sm:px-0">
-            Crafting modern web solutions with expertise in MERN stack, Laravel, and cutting-edge technologies.
-            Transforming ideas into elegant, scalable applications.
+          </h2>
+          <p
+            className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
+            style={{ textWrap: 'pretty' }}
+          >
+            I build full-stack web apps with React, Next.js, Node.js, and Laravel, from database
+            schema to production deploy. Currently shipping projects across the MERN stack.
           </p>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center"
+          {...rise(0.3)}
+          className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center"
         >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <Button
+            size="lg"
             onClick={scrollToProjects}
-            className="group bg-white text-black px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-medium text-base sm:text-lg flex items-center gap-2 sm:gap-3 hover:bg-gray-100 transition-all duration-300 shadow-lg w-full sm:w-auto justify-center"
+            className="group h-12 px-6 text-base w-full sm:w-auto"
           >
-            View My Work
-            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
-          </motion.button>
+            View my work
+            <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+          </Button>
 
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <Button
+            size="lg"
+            variant="outline"
             onClick={handleDownloadCV}
             disabled={isLoading}
-            className={`border border-white/30 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-medium text-base sm:text-lg flex items-center gap-2 sm:gap-3 hover:bg-white/5 transition-all duration-300 backdrop-blur-sm w-full sm:w-auto justify-center ${isLoading ? 'opacity-70 cursor-wait' : ''}`}
+            aria-label="Download CV"
+            className="h-12 px-6 text-base w-full sm:w-auto"
           >
-            {isLoading ? (
-              <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin text-blue-400" />
-            ) : (
-              <Download className="w-4 h-4 sm:w-5 sm:h-5" />
-            )}
-            {isLoading ? 'Preparing...' : 'Download CV'}
-          </motion.button>
+            {isLoading ? <Loader2 className="size-4 animate-spin" /> : <Download className="size-4" />}
+            {isLoading ? 'Preparing…' : 'Download CV'}
+          </Button>
         </motion.div>
       </div>
     </section>

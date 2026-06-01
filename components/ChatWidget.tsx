@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { MessageCircle, X, Send, Loader2, Sparkles } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
@@ -11,6 +11,8 @@ interface Message {
     content: string;
 }
 
+const SUGGESTIONS = ['What are his skills?', 'Show me his projects', 'How do I contact him?'];
+
 export default function ChatWidget() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
@@ -18,6 +20,7 @@ export default function ChatWidget() {
     const [input, setInput] = useState('');
     const [isEnabled, setIsEnabled] = useState(true);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const reduce = useReducedMotion();
 
     // Check if chatbot is enabled
     useEffect(() => {
@@ -35,14 +38,14 @@ export default function ChatWidget() {
         checkStatus();
     }, []);
 
-    // Auto-scroll to bottom of messages
+    // Auto-scroll to the latest message
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages]);
+        messagesEndRef.current?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+    }, [messages, reduce]);
 
     if (!isEnabled) return null;
 
-    const toggleChat = () => setIsOpen(!isOpen);
+    const toggleChat = () => setIsOpen((prev) => !prev);
 
     const sendMessage = async (text: string) => {
         if (!text.trim()) return;
@@ -98,7 +101,7 @@ export default function ChatWidget() {
             setMessages(prev => [...prev, {
                 id: Math.random().toString(36).substring(7),
                 role: 'assistant',
-                content: 'Sorry, I encountered an error. Please try again.'
+                content: 'Sorry, I ran into an error. Please try again.'
             }]);
         } finally {
             setIsLoading(false);
@@ -117,46 +120,60 @@ export default function ChatWidget() {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                        initial={reduce ? { opacity: 0 } : { opacity: 0, y: 20, scale: 0.97 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                        transition={{ duration: 0.2 }}
-                        className="mb-4 w-[90vw] sm:w-[400px] h-[500px] bg-gray-900 border border-white/20 rounded-2xl shadow-2xl overflow-hidden flex flex-col font-sans"
+                        exit={reduce ? { opacity: 0 } : { opacity: 0, y: 20, scale: 0.97 }}
+                        transition={{ duration: reduce ? 0.15 : 0.22, ease: [0.25, 1, 0.5, 1] }}
+                        role="dialog"
+                        aria-label="Chat with Chester's AI assistant"
+                        className="mb-4 w-[90vw] sm:w-[400px] h-[500px] bg-popover text-popover-foreground border border-border rounded-2xl shadow-[0_16px_48px_-12px_rgba(0,0,0,0.55)] overflow-hidden flex flex-col font-sans"
                     >
                         {/* Header */}
-                        <div className="bg-gradient-to-r from-blue-600 to-cyan-600 p-4 flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <div className="bg-white/20 p-1.5 rounded-lg">
-                                    <Sparkles className="w-5 h-5 text-white" />
-                                </div>
+                        <div className="flex items-center justify-between gap-2 p-4 border-b border-border">
+                            <div className="flex items-center gap-3">
+                                <span className="flex size-9 items-center justify-center rounded-lg border border-border text-foreground">
+                                    <Sparkles className="size-5" aria-hidden="true" />
+                                </span>
                                 <div>
-                                    <h3 className="font-bold text-white text-sm">Chester's AI Assistant</h3>
-                                    <p className="text-blue-100 text-xs flex items-center gap-1">
-                                        <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                                    <h3 className="font-semibold text-foreground text-sm leading-tight">
+                                        Chester&apos;s AI assistant
+                                    </h3>
+                                    <p className="text-muted-foreground text-xs flex items-center gap-1.5">
+                                        <span className="relative flex size-2" aria-hidden="true">
+                                            {!reduce && (
+                                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-60" />
+                                            )}
+                                            <span className="relative inline-flex size-2 rounded-full bg-brand" />
+                                        </span>
                                         Online
                                     </p>
                                 </div>
                             </div>
                             <button
+                                type="button"
                                 onClick={toggleChat}
-                                className="text-white/80 hover:text-white transition-colors p-1 rounded-full hover:bg-white/10"
+                                aria-label="Close chat"
+                                className="text-muted-foreground hover:text-foreground transition-colors p-1 rounded-full hover:bg-accent outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
                             >
-                                <X className="w-5 h-5" />
+                                <X className="size-5" aria-hidden="true" />
                             </button>
                         </div>
 
-                        {/* Messages Area */}
-                        <div className="flex-1 overflow-y-auto p-4 space-y-4 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-700 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-600">
+                        {/* Messages */}
+                        <div className="flex-1 overflow-y-auto p-4 space-y-4 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/40">
                             {messages.length === 0 && (
-                                <div className="text-center text-gray-400 mt-8 space-y-2">
-                                    <p className="text-sm">👋 Hi there! I'm Chester's virtual assistant.</p>
-                                    <p className="text-xs">Ask me anything about his projects, skills, or experience!</p>
-                                    <div className="flex flex-wrap gap-2 justify-center mt-4">
-                                        {['What are his skills?', 'Show me his projects', 'Contact info?'].map(q => (
+                                <div className="text-center mt-8 space-y-2">
+                                    <p className="text-sm text-foreground">Ask me about Chester&apos;s work.</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        Projects, skills, experience, or how to get in touch.
+                                    </p>
+                                    <div className="flex flex-wrap gap-2 justify-center pt-3">
+                                        {SUGGESTIONS.map((q) => (
                                             <button
                                                 key={q}
+                                                type="button"
                                                 onClick={() => sendMessage(q)}
-                                                className="text-xs bg-white/5 hover:bg-white/10 border border-white/10 rounded-full px-3 py-1 transition-colors"
+                                                className="text-xs text-foreground bg-transparent hover:bg-accent border border-border rounded-full px-3 py-1 transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
                                             >
                                                 {q}
                                             </button>
@@ -172,8 +189,8 @@ export default function ChatWidget() {
                                 >
                                     <div
                                         className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${m.role === 'user'
-                                            ? 'bg-blue-600 text-white rounded-br-none'
-                                            : 'bg-white/10 text-gray-100 border border-white/10 rounded-bl-none'
+                                            ? 'bg-primary text-primary-foreground rounded-br-none'
+                                            : 'bg-muted text-foreground border border-border rounded-bl-none'
                                             }`}
                                     >
                                         {m.role === 'assistant' ? (
@@ -182,7 +199,7 @@ export default function ChatWidget() {
                                                     components={{
                                                         p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
                                                         a: ({ children, href }) => (
-                                                            <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
+                                                            <a href={href} target="_blank" rel="noopener noreferrer" className="text-brand hover:underline">
                                                                 {children}
                                                             </a>
                                                         ),
@@ -190,7 +207,7 @@ export default function ChatWidget() {
                                                         ol: ({ children }) => <ol className="list-decimal list-inside mb-2">{children}</ol>,
                                                         li: ({ children }) => <li className="mb-1">{children}</li>,
                                                         strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
-                                                        code: ({ children }) => <code className="bg-white/10 px-1 py-0.5 rounded text-xs">{children}</code>,
+                                                        code: ({ children }) => <code className="bg-background/60 px-1 py-0.5 rounded text-xs">{children}</code>,
                                                     }}
                                                 >
                                                     {m.content}
@@ -205,60 +222,53 @@ export default function ChatWidget() {
 
                             {isLoading && (
                                 <div className="flex justify-start">
-                                    <div className="bg-white/10 rounded-2xl rounded-bl-none px-4 py-3 border border-white/10">
-                                        <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />
+                                    <div className="bg-muted rounded-2xl rounded-bl-none px-4 py-3 border border-border">
+                                        <Loader2 className="size-4 text-muted-foreground animate-spin" aria-label="Assistant is typing" />
                                     </div>
                                 </div>
                             )}
                             <div ref={messagesEndRef} />
                         </div>
 
-                        {/* Input Area */}
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                if (!input.trim()) return;
-                                sendMessage(input);
-                                setInput('');
-                            }}
-                            className="p-4 border-t border-white/10 bg-gray-900/50 backdrop-blur-sm"
-                        >
+                        {/* Input */}
+                        <form onSubmit={handleSubmit} className="p-4 border-t border-border">
                             <div className="flex gap-2">
                                 <input
-                                    className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 placeholder-gray-500 transition-all"
+                                    className="flex-1 bg-background border border-input rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-[3px] focus:ring-ring/50 focus:border-ring transition"
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
-                                    placeholder="Type a message..."
+                                    placeholder="Type a message…"
+                                    aria-label="Message"
                                 />
                                 <button
                                     type="submit"
-                                    disabled={isLoading || !(input || '').trim()}
-                                    className="bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:hover:bg-blue-600 text-white p-2.5 rounded-xl transition-all duration-200 shadow-lg shadow-blue-900/20"
+                                    disabled={isLoading || !input.trim()}
+                                    aria-label="Send message"
+                                    className="bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:pointer-events-none p-2.5 rounded-xl transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
                                 >
-                                    <Send className="w-4 h-4" />
+                                    <Send className="size-4" aria-hidden="true" />
                                 </button>
                             </div>
-                            <div className="text-center mt-2">
-                                <p className="text-[10px] text-gray-600">Powered by Gemini AI</p>
-                            </div>
+                            <p className="text-center text-[10px] text-muted-foreground mt-2">Powered by Gemini</p>
                         </form>
                     </motion.div>
                 )}
             </AnimatePresence>
 
             <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                type="button"
+                whileHover={reduce ? undefined : { scale: 1.05 }}
+                whileTap={reduce ? undefined : { scale: 0.95 }}
                 onClick={toggleChat}
-                className="group relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full shadow-2xl shadow-blue-900/30 hover:shadow-blue-600/40 transition-all duration-300 z-50"
+                aria-label={isOpen ? 'Close chat' : 'Open chat with AI assistant'}
+                aria-expanded={isOpen}
+                className="group relative flex items-center justify-center size-12 sm:size-14 bg-brand text-brand-foreground rounded-full shadow-[0_16px_48px_-12px_rgba(0,0,0,0.55)] hover:bg-brand-deep transition-colors duration-300 outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
-                <span className="absolute inset-0 rounded-full bg-white/20 animate-ping opacity-0 group-hover:opacity-100 duration-1000"></span>
-                {isOpen ? (
-                    <X className="w-6 h-6 text-white" />
-                ) : (
-                    <MessageCircle className="w-6 h-6 text-white" />
+                {!reduce && !isOpen && (
+                    <span className="absolute inset-0 rounded-full bg-brand opacity-0 group-hover:opacity-40 group-hover:animate-ping" />
                 )}
+                {isOpen ? <X className="size-6" aria-hidden="true" /> : <MessageCircle className="size-6" aria-hidden="true" />}
             </motion.button>
-        </div >
+        </div>
     );
 }
