@@ -169,3 +169,29 @@
     animation: none !important;
   }
 }
+
+/*
+ * Hero drafting marks: amber registration brackets that "draw" on load via
+ * stroke-dashoffset. The drawn state is the default (visible even if the
+ * animation never runs); the draw-on is a motion-only enhancement.
+ */
+.draft-mark {
+  stroke-dasharray: var(--draft-len, 44);
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .draft-mark {
+    animation: draft-draw 0.9s cubic-bezier(0.25, 1, 0.5, 1) both;
+    animation-delay: var(--draft-delay, 0.5s);
+  }
+}
+
+@keyframes draft-draw {
+  from {
+    stroke-dashoffset: var(--draft-len, 44);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, Download, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import HeroFrame from '@/components/HeroFrame';
 import { useActiveResume } from '@/hooks/use-resumes';
 
 export default function Hero() {
@@ -48,6 +49,7 @@ export default function Hero() {
       className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16 sm:pt-20 lg:pt-24"
     >
       <div className="relative z-10 text-center w-[95%] sm:w-[90%] max-w-3xl mx-auto px-3 sm:px-4 lg:px-8">
+        <HeroFrame />
         <motion.div {...rise(0)} className="mb-6 flex justify-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium tracking-wide text-muted-foreground">
             <span className="relative flex h-2 w-2" aria-hidden="true">
