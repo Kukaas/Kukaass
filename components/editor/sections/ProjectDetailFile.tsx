@@ -8,7 +8,6 @@ import ImageCarousel from '@/components/ImageCarousel';
 import PrivateRepoAccess from '@/components/PrivateRepoAccess';
 import { useProject } from '@/hooks/use-projects';
 import { useEditor } from '../EditorContext';
-import { slugify } from '../tabs';
 
 function fmt(date?: string | Date) {
   if (!date) return undefined;
