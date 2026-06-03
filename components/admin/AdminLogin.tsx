@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Lock, Loader2 } from 'lucide-react';
+import TrafficLights from '@/components/shared/TrafficLights';
 import { applyTheme, loadThemeId, themeById } from '@/components/editor/theme';
 
 export default function AdminLogin() {
@@ -51,9 +52,7 @@ export default function AdminLogin() {
             >
                 {/* Title bar */}
                 <div className="flex h-9 select-none items-center gap-2 border-b border-border px-3 text-[12px] text-muted-foreground">
-                    <span className="size-3 rounded-full" style={{ backgroundColor: '#ff5f57' }} aria-hidden="true" />
-                    <span className="size-3 rounded-full" style={{ backgroundColor: '#febc2e' }} aria-hidden="true" />
-                    <span className="size-3 rounded-full" style={{ backgroundColor: '#28c840' }} aria-hidden="true" />
+                    <TrafficLights />
                     <span className="ml-2 truncate">auth.ts — admin</span>
                 </div>
 

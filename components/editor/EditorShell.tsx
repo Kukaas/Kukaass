@@ -95,6 +95,26 @@ export default function EditorShell() {
     });
   }, []);
 
+  // Tab context-menu actions (VS Code-style): close others / to the right / all.
+  const closeOtherKeys = useCallback((key: TabKey) => {
+    setOpenKeys([key]);
+    setActiveKey(key);
+  }, []);
+
+  const closeKeysToRight = useCallback((key: TabKey) => {
+    const keys = openKeysRef.current;
+    const idx = keys.indexOf(key);
+    if (idx === -1) return;
+    const remaining = keys.slice(0, idx + 1);
+    setOpenKeys(remaining);
+    setActiveKey((curr) => (curr && remaining.includes(curr) ? curr : key));
+  }, []);
+
+  const closeAllKeys = useCallback(() => {
+    setOpenKeys([]);
+    setActiveKey(null);
+  }, []);
+
   const toggleExplorer = useCallback(() => setExplorerOpen((v) => !v), []);
   const toggleTerminal = useCallback(() => setTerminalOpen((v) => !v), []);
   const toggleAssistant = useCallback(() => setAssistantOpen((v) => !v), []);
@@ -211,6 +231,9 @@ export default function EditorShell() {
       openProjectById,
       registerProjectTitle,
       closeKey,
+      closeOtherKeys,
+      closeKeysToRight,
+      closeAllKeys,
       isMobile,
       explorerOpen,
       toggleExplorer,
@@ -241,6 +264,9 @@ export default function EditorShell() {
       openProjectById,
       registerProjectTitle,
       closeKey,
+      closeOtherKeys,
+      closeKeysToRight,
+      closeAllKeys,
       isMobile,
       explorerOpen,
       toggleExplorer,

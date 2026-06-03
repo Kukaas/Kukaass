@@ -6,27 +6,8 @@ import { resolveTab } from './tabs';
 import MenuBar from './MenuBar';
 import AssistantIcon from './AssistantIcon';
 import SettingsMenu from './SettingsMenu';
+import TrafficLights from '@/components/shared/TrafficLights';
 import { PROFILE } from './data';
-
-/** macOS window chrome — the close / minimise / zoom "traffic lights". Decorative. */
-function TrafficLights() {
-  const lights = [
-    { fill: '#ff5f57', ring: '#e0443e' },
-    { fill: '#febc2e', ring: '#dea123' },
-    { fill: '#28c840', ring: '#1aac29' },
-  ];
-  return (
-    <div className="flex items-center gap-2 pr-1" aria-hidden="true">
-      {lights.map((l) => (
-        <span
-          key={l.fill}
-          className="size-3 rounded-full"
-          style={{ backgroundColor: l.fill, boxShadow: `inset 0 0 0 0.5px ${l.ring}` }}
-        />
-      ))}
-    </div>
-  );
-}
 
 export default function TitleBar() {
   const {
@@ -58,7 +39,7 @@ export default function TitleBar() {
           </button>
         ) : (
           <>
-            <TrafficLights />
+            <TrafficLights className="pr-1" />
             <MenuBar />
           </>
         )}

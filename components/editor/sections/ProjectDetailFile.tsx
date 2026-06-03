@@ -46,7 +46,7 @@ export default function ProjectDetailFile({ id }: { id: string }) {
 
   if (isLoading) {
     return (
-      <div className="mx-auto w-full max-w-3xl animate-pulse px-5 py-10 sm:px-8">
+      <div className="w-full max-w-3xl animate-pulse px-5 py-10 sm:px-8">
         <div className="mb-4 h-7 w-1/2 rounded bg-muted" />
         <div className="mb-8 h-4 w-3/4 rounded bg-muted" />
         <div className="mb-8 aspect-video rounded-xl border border-border bg-card" />
@@ -60,7 +60,7 @@ export default function ProjectDetailFile({ id }: { id: string }) {
 
   if (error || !project) {
     return (
-      <div className="mx-auto w-full max-w-3xl px-5 py-12 font-mono text-[13px] sm:px-8">
+      <div className="w-full max-w-3xl px-5 py-12 font-mono text-[13px] sm:px-8">
         <p className="text-destructive">Error: project not found.</p>
         <Button variant="outline" className="mt-4" onClick={() => openFile('projects')}>
           <ArrowLeft className="size-4" aria-hidden="true" />
@@ -88,7 +88,7 @@ export default function ProjectDetailFile({ id }: { id: string }) {
   ];
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-5 py-8 sm:px-8 sm:py-12">
+    <div className="w-full max-w-3xl px-5 py-8 sm:px-8 sm:py-12">
       <button
         type="button"
         onClick={() => openFile('projects')}

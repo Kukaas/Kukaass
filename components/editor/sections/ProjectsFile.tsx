@@ -15,11 +15,11 @@ export default function ProjectsFile() {
   const { data: projects, isLoading, error } = useProjects();
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-8 sm:py-12">
+    <div className="w-full max-w-7xl px-6 py-8 sm:px-8 sm:py-12">
       {isLoading && (
         <>
           <HeaderLine>loading projects…</HeaderLine>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
               <div key={i} className="animate-pulse rounded-xl border border-border bg-card p-6">
                 <div className="mb-5 aspect-video rounded-lg bg-muted" />
@@ -48,7 +48,7 @@ export default function ProjectsFile() {
           </HeaderLine>
 
           {projects && projects.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {projects.map((project: Project, index: number) => (
                 <EditorProjectCard key={project._id} project={project} index={index} />
               ))}

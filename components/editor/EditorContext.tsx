@@ -26,6 +26,12 @@ export interface EditorContextValue {
   registerProjectTitle: (id: string, title: string) => void;
   /** Close a tab by key. */
   closeKey: (key: TabKey) => void;
+  /** Close every tab except the given one. */
+  closeOtherKeys: (key: TabKey) => void;
+  /** Close all tabs to the right of the given one. */
+  closeKeysToRight: (key: TabKey) => void;
+  /** Close every open tab. */
+  closeAllKeys: () => void;
 
   isMobile: boolean;
 

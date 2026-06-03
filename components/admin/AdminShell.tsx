@@ -13,6 +13,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import TrafficLights from '@/components/shared/TrafficLights';
 import { applyTheme, loadThemeId, themeById } from '@/components/editor/theme';
 
 export type AdminSection = 'projects' | 'experiences' | 'resumes' | 'messages' | 'settings';
@@ -30,26 +31,6 @@ const NAV: NavItem[] = [
   { section: 'messages', label: 'Messages', icon: Inbox },
   { section: 'settings', label: 'Settings', icon: Settings },
 ];
-
-/** macOS window chrome — decorative traffic lights, matching the editor title bar. */
-function TrafficLights() {
-  const lights = [
-    { fill: '#ff5f57', ring: '#e0443e' },
-    { fill: '#febc2e', ring: '#dea123' },
-    { fill: '#28c840', ring: '#1aac29' },
-  ];
-  return (
-    <div className="flex items-center gap-2 pr-1" aria-hidden="true">
-      {lights.map((l) => (
-        <span
-          key={l.fill}
-          className="size-3 rounded-full"
-          style={{ backgroundColor: l.fill, boxShadow: `inset 0 0 0 0.5px ${l.ring}` }}
-        />
-      ))}
-    </div>
-  );
-}
 
 interface AdminShellProps {
   /** The dashboard section this view belongs to (drives the rail highlight). */
@@ -87,7 +68,7 @@ export default function AdminShell({ activeSection, tabLabel, tabIcon: TabIcon =
       {/* Title bar */}
       <header className="flex h-9 shrink-0 select-none items-center justify-between border-b border-border bg-card px-3 text-[12px] text-muted-foreground">
         <div className="flex flex-1 items-center gap-2">
-          <TrafficLights />
+          <TrafficLights className="pr-1" />
           <span className="ml-1 text-foreground/80">admin</span>
         </div>
         <div className="flex min-w-0 items-center gap-2 truncate">
