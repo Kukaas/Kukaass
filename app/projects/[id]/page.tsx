@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import GlassCard from '@/components/GlassCard';
 import PrivateRepoAccess from '@/components/PrivateRepoAccess';
 import ImageCarousel from '@/components/ImageCarousel';
+import ChatWidget from '@/components/ChatWidget';
 import { useProject } from '@/hooks/use-projects';
 import { useViewTransitionRouter, viewTransitionStyle } from '@/hooks/use-view-transition-router';
 
@@ -385,6 +386,10 @@ export default function ProjectDetails({ params }: { params: Promise<{ id: strin
           </motion.div>
         </div>
       )}
+
+      {/* The AI assistant stays reachable while browsing a project. On the
+          home editor it lives in the terminal panel instead. */}
+      <ChatWidget />
     </div>
   );
 }

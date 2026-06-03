@@ -1,15 +1,22 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import Providers from "./providers";
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import ChatWidget from "@/components/ChatWidget";
 import './globals.css'
 
-const poppins = Poppins({
-  variable: "--font-poppins",
+// Geist Sans carries reading prose; Geist Mono carries all editor chrome
+// (file tree, tabs, status bar, terminal). See DESIGN.md "Filament Dark".
+const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  display: "swap",
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 // Person structured data. Rendered server-side in <head> so it stays stable and
@@ -160,8 +167,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        {/* Apply the saved editor theme before paint to avoid a flash back to
+            the default. Mirrors components/editor/theme.ts. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var T={'filament-dark':{m:'dark',b:'oklch(0.78 0.145 75)',d:'oklch(0.7 0.15 70)'},'filament-light':{m:'light',b:'oklch(0.72 0.15 70)',d:'oklch(0.66 0.16 65)'},'ember':{m:'dark',b:'oklch(0.7 0.19 35)',d:'oklch(0.63 0.2 32)'},'mint':{m:'dark',b:'oklch(0.78 0.14 165)',d:'oklch(0.71 0.15 163)'},'iris':{m:'dark',b:'oklch(0.72 0.15 285)',d:'oklch(0.65 0.17 285)'}};var id=localStorage.getItem('kukaass.theme')||'filament-dark';var t=T[id]||T['filament-dark'];var r=document.documentElement;r.classList.toggle('dark',t.m==='dark');r.style.setProperty('--brand',t.b);r.style.setProperty('--brand-deep',t.d);r.style.setProperty('--ring',t.b);}catch(e){}})();`,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -182,14 +196,13 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/logo.jpeg" />
       </head>
       <body
-        className={`${poppins.variable} antialiased bg-background text-foreground overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground overflow-x-hidden`}
       >
         <Providers>
           {children}
         </Providers>
         <Analytics />
         <SpeedInsights />
-        <ChatWidget />
       </body>
     </html>
   );
