@@ -19,7 +19,7 @@ export default function ProjectsFile() {
       {isLoading && (
         <>
           <HeaderLine>loading projects…</HeaderLine>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
             {[0, 1, 2, 3].map((i) => (
               <div key={i} className="animate-pulse rounded-xl border border-border bg-card p-6">
                 <div className="mb-5 aspect-video rounded-lg bg-muted" />
@@ -48,7 +48,7 @@ export default function ProjectsFile() {
           </HeaderLine>
 
           {projects && projects.length > 0 ? (
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
               {projects.map((project: Project, index: number) => (
                 <EditorProjectCard key={project._id} project={project} index={index} />
               ))}
