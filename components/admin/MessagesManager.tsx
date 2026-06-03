@@ -10,6 +10,7 @@ import {
     DialogTitle,
     DialogDescription,
 } from '@/components/ui/dialog';
+import Markdown from '@/components/shared/Markdown';
 import { useContacts, useSetContactRead, useDeleteContact, type Contact } from '@/hooks/use-contacts';
 
 const LONG_MESSAGE = 220;
@@ -88,9 +89,9 @@ export default function MessagesManager() {
                             </div>
 
                             <div className="flex-1">
-                                <p className="line-clamp-3 whitespace-pre-wrap break-words text-[13px] leading-relaxed text-foreground/85">
-                                    {m.message}
-                                </p>
+                                <div className="max-h-19 overflow-hidden text-[13px] leading-relaxed text-foreground/85">
+                                    <Markdown>{m.message}</Markdown>
+                                </div>
                                 {isLong && (
                                     <button
                                         type="button"
@@ -159,8 +160,8 @@ export default function MessagesManager() {
                                     </div>
                                 </DialogDescription>
                             </DialogHeader>
-                            <div className="editor-scroll max-h-[55vh] overflow-y-auto whitespace-pre-wrap break-words rounded-md border border-border bg-background/40 p-4 text-[13px] leading-relaxed text-foreground/90">
-                                {viewing.message}
+                            <div className="editor-scroll max-h-[55vh] overflow-y-auto rounded-md border border-border bg-background/40 p-4 text-[13px] leading-relaxed text-foreground/90">
+                                <Markdown>{viewing.message}</Markdown>
                             </div>
                             <div className="flex justify-end">
                                 <a

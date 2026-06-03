@@ -167,6 +167,17 @@ export default function EditorShell() {
     const onKey = (e: KeyboardEvent) => {
       const mod = e.metaKey || e.ctrlKey;
       if (!mod) return;
+      // Let the focused field own its keystrokes (e.g. ⌘B/⌘I/⌘K in the contact
+      // form) — app shortcuts shouldn't fire while typing in an input.
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
       const k = e.key.toLowerCase();
       if (k === 'k') {
         e.preventDefault();
