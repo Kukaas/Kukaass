@@ -1,11 +1,12 @@
+'use client';
+
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FileUp, Trash2, CheckCircle, Circle, Download, Plus, Loader2, Edit, X, Save } from 'lucide-react';
-import GlassCard from '@/components/GlassCard';
+import { FileUp, Trash2, CheckCircle, Circle, Download, Plus, Loader2, Pencil, X, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useResumes, useUploadResume, useToggleResumeActive, useDeleteResume, useUpdateResume } from '@/hooks/use-resumes';
 import { format } from 'date-fns';
+import { fieldLabel } from './styles';
 
 export default function ResumeManager() {
     const { data: resumes = [], isLoading } = useResumes();
@@ -129,100 +130,101 @@ export default function ResumeManager() {
     return (
         <div className="space-y-8">
             {/* Upload Section */}
-            <GlassCard>
-                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                    <FileUp className="w-5 h-5 text-blue-400" />
-                    Upload New Resume
+            <div className="rounded-lg border border-border bg-card p-6">
+                <h3 className="mb-6 flex items-center gap-2 text-[14px] font-semibold text-foreground">
+                    <FileUp className="size-4 text-brand" />
+                    Upload new resume
                 </h3>
                 <form onSubmit={handleUpload} className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div className="space-y-2">
-                            <label className="text-sm text-gray-400">Version Label (Internal)</label>
+                            <label className={fieldLabel}>Version label (internal)</label>
                             <Input
                                 value={label}
                                 onChange={(e) => setLabel(e.target.value)}
                                 placeholder="e.g., Early 2026 Version"
-                                className="bg-white/5 border-white/10 text-white"
                                 required
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm text-gray-400">Download Filename</label>
+                            <label className={fieldLabel}>Download filename</label>
                             <Input
                                 value={filename}
                                 onChange={(e) => setFilename(e.target.value)}
                                 placeholder="Maligaso, Chester Luke A"
-                                className="bg-white/5 border-white/10 text-white"
                             />
                         </div>
                     </div>
                     <div className="space-y-2">
-                        <label className="text-sm text-gray-400">PDF File</label>
+                        <label className={fieldLabel}>PDF file</label>
                         <Input
                             id="resume-file"
                             type="file"
                             accept=".pdf,application/pdf"
                             onChange={handleFileChange}
-                            className="bg-white/5 border-white/10 text-white file:text-blue-400 file:mr-4 file:bg-transparent file:border-0"
+                            className="file:mr-4 file:border-0 file:bg-transparent file:text-brand"
                             required
                         />
                     </div>
                     <Button
                         type="submit"
                         disabled={uploading || !selectedFile || !label}
-                        className="w-full bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center gap-2"
+                        className="w-full bg-brand text-brand-foreground hover:bg-brand-deep"
                     >
-                        {uploading ? 'Processing...' : (
+                        {uploading ? 'Processing…' : (
                             <>
-                                <Plus className="w-4 h-4" />
-                                Upload Resume
+                                <Plus className="size-4" />
+                                Upload resume
                             </>
                         )}
                     </Button>
                 </form>
-            </GlassCard>
+            </div>
 
             {/* List Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {resumes.map((resume) => (
-                    <GlassCard key={resume._id} className={`relative flex flex-col h-full border-2 transition-colors ${resume.isActive ? 'border-blue-500/50 bg-blue-500/5' : 'border-transparent'}`}>
+                    <div
+                        key={resume._id}
+                        className={`relative flex h-full flex-col rounded-lg border bg-card p-5 transition-colors ${resume.isActive ? 'border-brand/50 bg-brand/5' : 'border-border'}`}
+                    >
                         <div className="flex-1">
-                            <div className="flex items-start justify-between mb-4">
+                            <div className="mb-4 flex items-start justify-between gap-2">
                                 {editingId === resume._id ? (
-                                    <div className="space-y-2 w-full pr-8">
+                                    <div className="w-full space-y-2 pr-8">
                                         <Input
                                             value={editLabel}
                                             onChange={(e) => setEditLabel(e.target.value)}
-                                            className="bg-white/10 border-white/20 text-white h-8 text-sm"
+                                            className="h-8 text-sm"
                                             autoFocus
                                         />
-                                        <p className="text-[10px] text-gray-400 uppercase tracking-wider">Internal Label</p>
+                                        <p className={fieldLabel}>Internal label</p>
                                     </div>
                                 ) : (
                                     <div>
-                                        <h4 className="text-lg font-bold text-white mb-1">{resume.label}</h4>
-                                        <p className="text-xs text-gray-400">Uploaded {format(new Date(resume.createdAt), 'MMM d, yyyy')}</p>
+                                        <h4 className="mb-1 text-[14px] font-semibold text-foreground">{resume.label}</h4>
+                                        <p className="text-[11px] text-muted-foreground">Uploaded {format(new Date(resume.createdAt), 'MMM d, yyyy')}</p>
                                     </div>
                                 )}
                                 <div className="flex flex-col gap-2">
                                     <button
                                         onClick={() => handleToggleActive(resume._id, resume.isActive)}
                                         disabled={toggleActiveMutation.isPending}
-                                        className={`p-1 rounded-full transition-colors ${resume.isActive ? 'text-blue-400' : 'text-gray-500 hover:text-white'} ${toggleActiveMutation.isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                        className={`rounded-full p-1 transition-colors ${resume.isActive ? 'text-brand' : 'text-muted-foreground hover:text-foreground'} ${toggleActiveMutation.isPending ? 'cursor-not-allowed opacity-50' : ''}`}
                                         title={resume.isActive ? 'Active' : 'Set as Active'}
                                     >
                                         {toggleActiveMutation.isPending && toggleActiveMutation.variables?.id === resume._id ? (
-                                            <Loader2 className="w-6 h-6 animate-spin" />
+                                            <Loader2 className="size-6 animate-spin" />
                                         ) : resume.isActive ? (
-                                            <CheckCircle className="w-6 h-6" />
+                                            <CheckCircle className="size-6" />
                                         ) : (
-                                            <Circle className="w-6 h-6" />
+                                            <Circle className="size-6" />
                                         )}
                                     </button>
                                 </div>
                             </div>
 
-                            <div className="space-y-2 mb-6">
+                            <div className="mb-6 space-y-2">
                                 {editingId === resume._id ? (
                                     <div className="space-y-3">
                                         <div className="space-y-1">
@@ -230,77 +232,67 @@ export default function ResumeManager() {
                                                 <Input
                                                     value={editFilename}
                                                     onChange={(e) => setEditFilename(e.target.value)}
-                                                    className="bg-white/10 border-white/20 text-white h-8 text-sm"
+                                                    className="h-8 text-sm"
                                                 />
-                                                <span className="text-gray-500 text-sm">.pdf</span>
+                                                <span className="text-sm text-muted-foreground">.pdf</span>
                                             </div>
-                                            <p className="text-[10px] text-gray-400 uppercase tracking-wider">Download Filename</p>
+                                            <p className={fieldLabel}>Download filename</p>
                                         </div>
                                         <div className="space-y-1">
-                                            <div className="relative group">
+                                            <div className="group relative">
                                                 <Input
                                                     type="file"
                                                     accept=".pdf,application/pdf"
                                                     onChange={handleEditFileChange}
-                                                    className="opacity-0 absolute inset-0 w-full h-full cursor-pointer z-10"
+                                                    className="absolute inset-0 z-10 size-full cursor-pointer opacity-0"
                                                 />
-                                                <div className="bg-white/10 border border-white/20 rounded-md h-8 px-3 flex items-center gap-3 overflow-hidden group-hover:bg-white/15 transition-colors">
-                                                    <div className="flex items-center gap-1.5 min-w-fit">
-                                                        <FileUp className="w-3.5 h-3.5 text-blue-400" />
-                                                        <span className="text-[11px] font-semibold text-blue-400 uppercase tracking-tight">Attached File:</span>
+                                                <div className="flex h-8 items-center gap-3 overflow-hidden rounded-md border border-border bg-background/40 px-3 transition-colors group-hover:bg-accent">
+                                                    <div className="flex min-w-fit items-center gap-1.5">
+                                                        <FileUp className="size-3.5 text-brand" />
+                                                        <span className="text-[11px] font-semibold uppercase tracking-tight text-brand">Attached:</span>
                                                     </div>
-                                                    <span className="text-xs text-gray-200 font-medium truncate">
+                                                    <span className="truncate text-xs font-medium text-foreground/90">
                                                         {editFile ? editFile.name : resume.originalFilename}
                                                     </span>
                                                 </div>
                                             </div>
-                                            <p className="text-[10px] text-gray-400 uppercase tracking-wider">Replace File (Optional)</p>
+                                            <p className={fieldLabel}>Replace file (optional)</p>
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="flex items-center gap-2 text-sm text-gray-300">
-                                        <Download className="w-4 h-4 text-gray-500" />
+                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <Download className="size-4 text-muted-foreground/70" />
                                         <span className="truncate">{resume.filename}.pdf</span>
                                     </div>
                                 )}
                             </div>
                         </div>
 
-                        <div className="flex gap-2 pt-4 border-t border-white/10">
+                        <div className="flex gap-2 border-t border-border pt-4">
                             {editingId === resume._id ? (
                                 <>
                                     <Button
                                         size="sm"
-                                        className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-400 border-green-500/20"
+                                        className="flex-1 bg-brand text-brand-foreground hover:bg-brand-deep"
                                         onClick={() => handleUpdate(resume._id)}
                                         disabled={updateMutation.isPending}
                                     >
-                                        {updateMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
+                                        {updateMutation.isPending ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
                                         Save
                                     </Button>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="flex-1 border-white/20 text-white hover:bg-white/5"
-                                        onClick={cancelEditing}
-                                    >
-                                        <X className="w-4 h-4 mr-2" /> Cancel
+                                    <Button variant="outline" size="sm" className="flex-1" onClick={cancelEditing}>
+                                        <X className="size-4" /> Cancel
                                     </Button>
                                 </>
                             ) : (
                                 <>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="flex-1 border-white/20 text-white hover:bg-white/5"
-                                        onClick={() => startEditing(resume)}
-                                    >
-                                        <Edit className="w-4 h-4 mr-2" /> Edit
+                                    <Button variant="outline" size="sm" className="flex-1" onClick={() => startEditing(resume)}>
+                                        <Pencil className="size-3.5" /> Edit
                                     </Button>
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="flex-1 border-white/20 text-white hover:bg-white/5"
+                                        className="flex-1"
                                         onClick={() => {
                                             const link = document.createElement('a');
                                             link.href = resume.content;
@@ -311,23 +303,24 @@ export default function ResumeManager() {
                                         Preview
                                     </Button>
                                     <Button
-                                        variant="destructive"
+                                        variant="outline"
                                         size="sm"
-                                        className="flex-1 bg-red-500/10 hover:bg-red-500/20 border-red-500/20"
+                                        className="flex-1 border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive"
                                         onClick={() => handleDelete(resume._id)}
                                     >
-                                        <Trash2 className="w-4 h-4 mr-2" /> Delete
+                                        <Trash2 className="size-3.5" /> Delete
                                     </Button>
                                 </>
                             )}
                         </div>
-                    </GlassCard>
+                    </div>
                 ))}
             </div>
 
             {resumes.length === 0 && !isLoading && (
-                <div className="text-center py-12">
-                    <p className="text-gray-400">No resumes uploaded yet.</p>
+                <div className="py-12 text-center text-[13px] text-muted-foreground">
+                    <span className="select-none text-muted-foreground/50">// </span>
+                    No resumes uploaded yet.
                 </div>
             )}
         </div>

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import GlassCard from '@/components/GlassCard';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
@@ -48,25 +47,29 @@ export default function AdminSettings() {
     };
 
     if (loading) {
-        return <div className="h-48 bg-white/5 rounded-2xl animate-pulse" />;
+        return <div className="mx-auto h-32 max-w-2xl animate-pulse rounded-lg border border-border bg-card" />;
     }
 
     return (
-        <div className="max-w-2xl mx-auto">
-            <h2 className="text-2xl font-bold text-white mb-6">Global Settings</h2>
+        <div className="mx-auto max-w-2xl">
+            <h2 className="mb-1 text-[15px] font-semibold text-foreground">Global settings</h2>
+            <p className="mb-6 text-[12px] text-muted-foreground">
+                <span className="select-none text-muted-foreground/50">// </span>
+                Toggles that affect the public portfolio.
+            </p>
 
-            <GlassCard className="p-6">
-                <div className="flex items-center justify-between">
+            <div className="rounded-lg border border-border bg-card p-5">
+                <div className="flex items-center justify-between gap-4">
                     <div className="space-y-1">
-                        <Label htmlFor="chatbot-mode" className="text-lg text-white font-medium">
-                            AI Chatbot Assistant
+                        <Label htmlFor="chatbot-mode" className="text-[14px] font-medium text-foreground">
+                            AI chatbot assistant
                         </Label>
-                        <p className="text-sm text-gray-400">
+                        <p className="text-[12px] text-muted-foreground">
                             Enable or disable the AI chatbot on the public portfolio.
                             {chatbotEnabled ? (
-                                <span className="text-green-400 ml-2">(Active)</span>
+                                <span className="ml-2 text-brand">(active)</span>
                             ) : (
-                                <span className="text-red-400 ml-2">(Inactive)</span>
+                                <span className="ml-2 text-muted-foreground/70">(inactive)</span>
                             )}
                         </p>
                     </div>
@@ -74,10 +77,10 @@ export default function AdminSettings() {
                         id="chatbot-mode"
                         checked={chatbotEnabled}
                         onCheckedChange={handleToggle}
-                        className="data-[state=checked]:bg-blue-500"
+                        className="data-[state=checked]:bg-brand"
                     />
                 </div>
-            </GlassCard>
+            </div>
         </div>
     );
 }

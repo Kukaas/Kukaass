@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ExternalLink, Github, Lock, ArrowUpRight } from 'lucide-react';
+import { ExternalLink, Github, Lock, ArrowUpRight, ImageOff } from 'lucide-react';
 import Image from 'next/image';
 import GlassCard from '@/components/GlassCard';
 import PrivateRepoAccess from '@/components/PrivateRepoAccess';
@@ -42,7 +42,7 @@ export default function EditorProjectCard({ project, index }: { project: Project
           onClick={() => openProject(project)}
         >
           <div className="space-y-3">
-            {project.images && project.images.length > 0 && (
+            {project.images && project.images.length > 0 ? (
               <div className="relative aspect-video overflow-hidden rounded-lg border border-border">
                 <Image
                   src={project.images[0]}
@@ -56,6 +56,13 @@ export default function EditorProjectCard({ project, index }: { project: Project
                     open <ArrowUpRight className="size-3.5" aria-hidden="true" />
                   </span>
                 </div>
+              </div>
+            ) : (
+              <div className="flex aspect-video items-center justify-center rounded-lg border border-dashed border-border bg-muted/20 transition-colors group-hover:border-foreground/25">
+                <span className="flex flex-col items-center gap-1.5 font-mono text-[11px] text-muted-foreground/60">
+                  <ImageOff className="size-6" aria-hidden="true" />
+                  no preview
+                </span>
               </div>
             )}
 

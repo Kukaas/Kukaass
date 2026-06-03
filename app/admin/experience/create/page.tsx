@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Trash2, ArrowLeft } from 'lucide-react';
+import { Plus, Trash2, ArrowLeft, Briefcase } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import GlassCard from '@/components/GlassCard';
 import { useCreateExperience } from '@/hooks/use-experiences';
+import AdminShell from '@/components/admin/AdminShell';
 
 export default function CreateExperience() {
     const router = useRouter();
@@ -58,59 +58,45 @@ export default function CreateExperience() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 p-8">
-            <div className="max-w-4xl mx-auto">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-8"
+        <AdminShell activeSection="experiences" tabLabel="new-experience.tsx" tabIcon={Briefcase}>
+            <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-border bg-background/80 px-5 py-3 backdrop-blur">
+                <button
+                    type="button"
+                    onClick={() => router.push('/admin')}
+                    className="flex items-center gap-1.5 rounded-md px-2 py-1 text-[12px] text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
                 >
-                    <div className="flex justify-between items-center mb-6">
-                        <div className="flex items-center gap-4">
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={() => router.push('/admin')}
-                                className="flex items-center gap-2 text-white hover:text-blue-400 transition-colors duration-200"
-                            >
-                                <ArrowLeft className="w-5 h-5" />
-                                <span className="font-medium">Back to Dashboard</span>
-                            </motion.button>
-                        </div>
-                        <h1 className="text-3xl font-bold text-white">Add Experience</h1>
-                    </div>
-                </motion.div>
+                    <ArrowLeft className="size-4" /> Back
+                </button>
+                <span className="text-border">/</span>
+                <span className="text-[12px] text-foreground/80">Add experience</span>
+            </div>
 
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                >
-                    <GlassCard>
+            <div className="mx-auto max-w-4xl p-5">
+                <div className="rounded-lg border border-border bg-card p-6">
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                                    <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                                         Company
                                     </label>
                                     <input
                                         type="text"
                                         value={formData.company}
                                         onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-colors"
+                                        className="w-full px-4 py-3 rounded-md border border-border bg-background/40 text-foreground focus:outline-none focus:border-brand transition-colors"
                                         placeholder="Company name"
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                                    <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                                         Role
                                     </label>
                                     <input
                                         type="text"
                                         value={formData.role}
                                         onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-colors"
+                                        className="w-full px-4 py-3 rounded-md border border-border bg-background/40 text-foreground focus:outline-none focus:border-brand transition-colors"
                                         placeholder="Job role"
                                         required
                                     />
@@ -119,26 +105,26 @@ export default function CreateExperience() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                                    <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                                         Location
                                     </label>
                                     <input
                                         type="text"
                                         value={formData.location}
                                         onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-colors"
+                                        className="w-full px-4 py-3 rounded-md border border-border bg-background/40 text-foreground focus:outline-none focus:border-brand transition-colors"
                                         placeholder="Location (e.g. Remote, Cebu City)"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                                    <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                                         Map URL (Google Maps link)
                                     </label>
                                     <input
                                         type="url"
                                         value={formData.mapUrl}
                                         onChange={(e) => setFormData({ ...formData, mapUrl: e.target.value })}
-                                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-colors"
+                                        className="w-full px-4 py-3 rounded-md border border-border bg-background/40 text-foreground focus:outline-none focus:border-brand transition-colors"
                                         placeholder="https://goo.gl/maps/..."
                                     />
                                 </div>
@@ -146,7 +132,7 @@ export default function CreateExperience() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                                    <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                                         Start Date
                                     </label>
                                     <div className="grid grid-cols-2 gap-3">
@@ -157,11 +143,11 @@ export default function CreateExperience() {
                                                 const month = (parseInt(e.target.value) + 1).toString().padStart(2, '0');
                                                 setFormData({ ...formData, startDate: `${year}-${month}-01` });
                                             }}
-                                            className="px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-colors"
+                                            className="px-4 py-3 rounded-md border border-border bg-background/40 text-foreground focus:outline-none focus:border-brand transition-colors"
                                             required
                                         >
                                             {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((month, i) => (
-                                                <option key={i} value={i} className="bg-gray-900">{month}</option>
+                                                <option key={i} value={i} className="bg-card text-foreground">{month}</option>
                                             ))}
                                         </select>
                                         <select
@@ -170,17 +156,17 @@ export default function CreateExperience() {
                                                 const month = formData.startDate ? formData.startDate.split('-')[1] : (new Date().getMonth() + 1).toString().padStart(2, '0');
                                                 setFormData({ ...formData, startDate: `${e.target.value}-${month}-01` });
                                             }}
-                                            className="px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-colors"
+                                            className="px-4 py-3 rounded-md border border-border bg-background/40 text-foreground focus:outline-none focus:border-brand transition-colors"
                                             required
                                         >
                                             {Array.from({ length: 40 }, (_, i) => new Date().getFullYear() - i).map((year) => (
-                                                <option key={year} value={year} className="bg-gray-900">{year}</option>
+                                                <option key={year} value={year} className="bg-card text-foreground">{year}</option>
                                             ))}
                                         </select>
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                                    <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                                         End Date
                                     </label>
                                     <div className="grid grid-cols-2 gap-3">
@@ -191,12 +177,12 @@ export default function CreateExperience() {
                                                 const month = (parseInt(e.target.value) + 1).toString().padStart(2, '0');
                                                 setFormData({ ...formData, endDate: `${year}-${month}-01` });
                                             }}
-                                            className="px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-colors disabled:opacity-50"
+                                            className="px-4 py-3 rounded-md border border-border bg-background/40 text-foreground focus:outline-none focus:border-brand transition-colors disabled:opacity-50"
                                             disabled={formData.isCurrent}
                                             required={!formData.isCurrent}
                                         >
                                             {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((month, i) => (
-                                                <option key={i} value={i} className="bg-gray-900">{month}</option>
+                                                <option key={i} value={i} className="bg-card text-foreground">{month}</option>
                                             ))}
                                         </select>
                                         <select
@@ -205,12 +191,12 @@ export default function CreateExperience() {
                                                 const month = formData.endDate ? formData.endDate.split('-')[1] : (new Date().getMonth() + 1).toString().padStart(2, '0');
                                                 setFormData({ ...formData, endDate: `${e.target.value}-${month}-01` });
                                             }}
-                                            className="px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-colors disabled:opacity-50"
+                                            className="px-4 py-3 rounded-md border border-border bg-background/40 text-foreground focus:outline-none focus:border-brand transition-colors disabled:opacity-50"
                                             disabled={formData.isCurrent}
                                             required={!formData.isCurrent}
                                         >
                                             {Array.from({ length: 40 }, (_, i) => new Date().getFullYear() - i).map((year) => (
-                                                <option key={year} value={year} className="bg-gray-900">{year}</option>
+                                                <option key={year} value={year} className="bg-card text-foreground">{year}</option>
                                             ))}
                                         </select>
                                     </div>
@@ -220,9 +206,9 @@ export default function CreateExperience() {
                                             id="isCurrent"
                                             checked={formData.isCurrent}
                                             onChange={(e) => setFormData({ ...formData, isCurrent: e.target.checked })}
-                                            className="rounded border-white/20 bg-white/10 text-blue-500 focus:ring-blue-500"
+                                            className="size-4 rounded border-border bg-background text-brand accent-brand focus:ring-2 focus:ring-ring/50"
                                         />
-                                        <label htmlFor="isCurrent" className="text-sm text-gray-400">
+                                        <label htmlFor="isCurrent" className="text-sm text-muted-foreground">
                                             Currently working here
                                         </label>
                                     </div>
@@ -230,7 +216,7 @@ export default function CreateExperience() {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-4">
+                                <label className="mb-4 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                                     Description (Bullet Points)
                                 </label>
                                 <div className="space-y-4">
@@ -240,7 +226,7 @@ export default function CreateExperience() {
                                                 <textarea
                                                     value={desc}
                                                     onChange={(e) => handleDescriptionChange(index, e.target.value)}
-                                                    className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-colors"
+                                                    className="w-full px-4 py-2 rounded-md border border-border bg-background/40 text-foreground focus:outline-none focus:border-brand transition-colors"
                                                     placeholder="Describe your responsibilities or achievements..."
                                                     rows={2}
                                                 />
@@ -248,7 +234,7 @@ export default function CreateExperience() {
                                             <button
                                                 type="button"
                                                 onClick={() => handleRemoveDescription(index)}
-                                                className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors h-fit self-center"
+                                                className="p-2 text-destructive hover:bg-destructive/10 rounded-md transition-colors h-fit self-center"
                                             >
                                                 <Trash2 className="w-5 h-5" />
                                             </button>
@@ -257,7 +243,7 @@ export default function CreateExperience() {
                                     <button
                                         type="button"
                                         onClick={handleAddDescription}
-                                        className="w-full py-3 border border-dashed border-white/20 rounded-lg text-gray-400 hover:text-white hover:border-white/40 transition-all flex items-center justify-center gap-2 mt-2"
+                                        className="mt-2 flex w-full items-center justify-center gap-2 rounded-md border border-dashed border-border py-3 text-muted-foreground transition-colors hover:border-brand/50 hover:text-foreground"
                                     >
                                         <Plus className="w-5 h-5" />
                                         Add Bullet Point
@@ -271,18 +257,17 @@ export default function CreateExperience() {
                                     disabled={submitting}
                                     whileHover={{ scale: submitting ? 1 : 1.02 }}
                                     whileTap={{ scale: submitting ? 1 : 0.98 }}
-                                    className={`px-8 py-3 rounded-lg font-medium transition-all ${submitting
-                                        ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
-                                        : 'bg-white text-black hover:bg-gray-100 shadow-lg'
+                                    className={`rounded-md px-8 py-3 font-medium transition-colors ${submitting
+                                        ? 'cursor-not-allowed bg-muted text-muted-foreground'
+                                        : 'bg-brand text-brand-foreground hover:bg-brand-deep'
                                         }`}
                                 >
-                                    {submitting ? 'Creating...' : 'Create Experience'}
+                                    {submitting ? 'Creating…' : 'Create experience'}
                                 </motion.button>
                             </div>
                         </form>
-                    </GlassCard>
-                </motion.div>
+                </div>
             </div>
-        </div>
+        </AdminShell>
     );
 }

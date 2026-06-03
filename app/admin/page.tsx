@@ -1,23 +1,32 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Edit, Trash2, Eye, Lock, Briefcase, FolderRoot, FileText, Settings } from 'lucide-react';
+import { Plus, Pencil, Trash2, FolderRoot, Briefcase, FileText, Settings, FileCode2, ImageOff } from 'lucide-react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import GlassCard from '@/components/GlassCard';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { useProjects, useDeleteProject, type Project } from '@/hooks/use-projects';
-import { useExperiences, useDeleteExperience, type Experience } from '@/hooks/use-experiences';
-import { cn } from '@/lib/utils';
+import { useProjects, useDeleteProject } from '@/hooks/use-projects';
+import { useExperiences, useDeleteExperience } from '@/hooks/use-experiences';
 import { format } from 'date-fns';
 import ResumeManager from '@/components/admin/ResumeManager';
-import AdminSettings from '../../components/admin/AdminSettings';
+import AdminSettings from '@/components/admin/AdminSettings';
+import AdminShell, { type AdminSection } from '@/components/admin/AdminShell';
 
-export default function AdminDashboard() {
+const TAB_META: Record<AdminSection, { tabLabel: string; tabIcon: typeof FileCode2; title: string }> = {
+  projects: { tabLabel: 'projects.tsx', tabIcon: FolderRoot, title: 'Projects' },
+  experiences: { tabLabel: 'experiences.tsx', tabIcon: Briefcase, title: 'Experiences' },
+  resumes: { tabLabel: 'resumes.json', tabIcon: FileText, title: 'Resumes' },
+  settings: { tabLabel: 'settings.json', tabIcon: Settings, title: 'Settings' },
+};
+
+const cardClass =
+  'group flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-brand/40';
+
+function AdminDashboard() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'projects' | 'experiences' | 'resumes' | 'settings'>('projects');
+  const params = useSearchParams();
+  const activeTab = (params.get('tab') as AdminSection) || 'projects';
 
   const { data: projects = [], isLoading: projectsLoading } = useProjects();
   const { data: experiences = [], isLoading: experiencesLoading } = useExperiences();
@@ -43,89 +52,39 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/auth/logout', { method: 'POST' });
-      window.location.reload(); // Refresh to trigger layout re-check
-    } catch (err) {
-      console.error('Logout error:', err);
-    }
-  };
-
   const loading = projectsLoading || experiencesLoading;
+  const meta = TAB_META[activeTab];
+  const canAdd = activeTab === 'projects' || activeTab === 'experiences';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 p-4 sm:p-8">
-      <div className="max-w-7xl mx-auto">
-        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
-            <p className="text-gray-400">Manage your portfolio content</p>
-          </div>
-          <div className="flex gap-3">
-            {activeTab !== 'resumes' && activeTab !== 'settings' && (
-              <Button
-                onClick={() => router.push(activeTab === 'projects' ? '/admin/create' : '/admin/experience/create')}
-                className="bg-white text-black hover:bg-gray-100"
-              >
-                <Plus className="w-5 h-5 mr-2" />
-                Add {activeTab === 'projects' ? 'Project' : 'Experience'}
-              </Button>
-            )}
-            <Button onClick={handleLogout} variant="outline" className="border-white/30 text-white hover:bg-white/5">
-              Logout
-            </Button>
-          </div>
-        </header>
-
-        {/* Tabs */}
-        <div className="flex gap-2 mb-8 bg-white/5 p-1 rounded-xl border border-white/10 w-fit">
-          <button
-            onClick={() => setActiveTab('projects')}
-            className={cn(
-              "flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
-              activeTab === 'projects' ? "bg-white text-black shadow-lg" : "text-gray-400 hover:text-white"
-            )}
-          >
-            <FolderRoot className="w-4 h-4" />
-            Projects
-          </button>
-          <button
-            onClick={() => setActiveTab('experiences')}
-            className={cn(
-              "flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
-              activeTab === 'experiences' ? "bg-white text-black shadow-lg" : "text-gray-400 hover:text-white"
-            )}
-          >
-            <Briefcase className="w-4 h-4" />
-            Experiences
-          </button>
-          <button
-            onClick={() => setActiveTab('resumes')}
-            className={cn(
-              "flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
-              activeTab === 'resumes' ? "bg-white text-black shadow-lg" : "text-gray-400 hover:text-white"
-            )}
-          >
-            <FileText className="w-4 h-4" />
-            Resumes
-          </button>
-          <button
-            onClick={() => setActiveTab('settings')}
-            className={cn(
-              "flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
-              activeTab === 'settings' ? "bg-white text-black shadow-lg" : "text-gray-400 hover:text-white"
-            )}
-          >
-            <Settings className="w-4 h-4" />
-            Settings
-          </button>
+    <AdminShell activeSection={activeTab} tabLabel={meta.tabLabel} tabIcon={meta.tabIcon}>
+      {/* Toolbar */}
+      <div className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-border bg-background/80 px-5 py-3 backdrop-blur">
+        <div className="flex items-center gap-2 text-[12px] text-muted-foreground">
+          <span className="text-foreground/80">{meta.title}</span>
+          {canAdd && (
+            <span className="text-muted-foreground/60">
+              · {activeTab === 'projects' ? projects.length : experiences.length} items
+            </span>
+          )}
         </div>
+        {canAdd && (
+          <Button
+            size="sm"
+            onClick={() => router.push(activeTab === 'projects' ? '/admin/create' : '/admin/experience/create')}
+            className="bg-brand text-brand-foreground hover:bg-brand-deep"
+          >
+            <Plus className="size-4" />
+            Add {activeTab === 'projects' ? 'project' : 'experience'}
+          </Button>
+        )}
+      </div>
 
+      <div className="p-5">
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-64 bg-white/5 rounded-2xl animate-pulse" />
+              <div key={i} className="h-56 animate-pulse rounded-lg border border-border bg-card" />
             ))}
           </div>
         ) : (
@@ -133,116 +92,113 @@ export default function AdminDashboard() {
             {activeTab === 'projects' ? (
               <motion.div
                 key="projects"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
               >
-                {projects.map((project, index) => (
-                  <GlassCard key={project._id} className="flex flex-col h-full">
-                    {project.images?.[0] && (
-                      <div className="aspect-video relative rounded-lg overflow-hidden mb-4">
+                {projects.map((project) => (
+                  <div key={project._id} className={cardClass}>
+                    {project.images?.[0] ? (
+                      <div className="relative aspect-video overflow-hidden border-b border-border">
                         <Image src={project.images[0]} alt={project.title} fill className="object-cover" />
                       </div>
+                    ) : (
+                      <div className="flex aspect-video items-center justify-center border-b border-dashed border-border bg-muted/20">
+                        <span className="flex flex-col items-center gap-1.5 text-[11px] text-muted-foreground/60">
+                          <ImageOff className="size-6" aria-hidden="true" />
+                          no preview
+                        </span>
+                      </div>
                     )}
-                    <div className="flex-1">
-                      <h3 className="text-lg font-bold text-white mb-2 line-clamp-1">{project.title}</h3>
-                      <p className="text-gray-400 text-sm line-clamp-2 mb-4">{project.description}</p>
+                    <div className="flex-1 p-4">
+                      <h3 className="mb-1 line-clamp-1 text-[14px] font-semibold text-foreground">{project.title}</h3>
+                      <p className="line-clamp-2 text-[12px] leading-relaxed text-muted-foreground">{project.description}</p>
                     </div>
-                    <div className="flex gap-2 pt-4 border-t border-white/10">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex-1 border-white/20 text-white"
-                        onClick={() => router.push(`/admin/edit/${project._id}`)}
-                      >
-                        <Edit className="w-4 h-4 mr-2" /> Edit
+                    <div className="flex gap-2 border-t border-border p-3">
+                      <Button variant="outline" size="sm" className="flex-1" onClick={() => router.push(`/admin/edit/${project._id}`)}>
+                        <Pencil className="size-3.5" /> Edit
                       </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        className="flex-1 bg-red-500/20  border-red-500/20"
-                        onClick={() => handleDeleteProject(project._id)}
-                      >
-                        <Trash2 className="w-4 h-4 mr-2" /> Delete
+                      <Button variant="outline" size="sm" className="flex-1 border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => handleDeleteProject(project._id)}>
+                        <Trash2 className="size-3.5" /> Delete
                       </Button>
                     </div>
-                  </GlassCard>
+                  </div>
                 ))}
+                {projects.length === 0 && <EmptyState label="No projects yet." />}
               </motion.div>
             ) : activeTab === 'experiences' ? (
               <motion.div
                 key="experiences"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                className="grid grid-cols-1 md:grid-cols-2 gap-6"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                className="grid grid-cols-1 gap-4 md:grid-cols-2"
               >
-                {experiences.map((exp, index) => (
-                  <GlassCard key={exp._id} className="flex flex-col">
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between mb-2">
-                        <h3 className="text-lg font-bold text-white">{exp.role}</h3>
-                        <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded">
+                {experiences.map((exp) => (
+                  <div key={exp._id} className={cardClass}>
+                    <div className="flex-1 p-4">
+                      <div className="mb-2 flex items-start justify-between gap-2">
+                        <h3 className="text-[14px] font-semibold text-foreground">{exp.role}</h3>
+                        <span className="rounded border border-border px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">
                           {exp.isCurrent ? 'Present' : 'Past'}
                         </span>
                       </div>
-                      <p className="text-blue-300 font-medium mb-1">{exp.company}</p>
-                      <p className="text-gray-500 text-xs mb-4">
-                        {format(new Date(exp.startDate), 'MMM yyyy')} - {exp.isCurrent ? 'Present' : exp.endDate ? format(new Date(exp.endDate), 'MMM yyyy') : ''}
+                      <p className="mb-1 text-[12px] font-medium text-brand">{exp.company}</p>
+                      <p className="mb-3 text-[11px] text-muted-foreground/70">
+                        {format(new Date(exp.startDate), 'MMM yyyy')} —{' '}
+                        {exp.isCurrent ? 'Present' : exp.endDate ? format(new Date(exp.endDate), 'MMM yyyy') : ''}
                       </p>
-                      <ul className="space-y-1 mb-4">
+                      <ul className="space-y-1">
                         {exp.description?.slice(0, 2).map((d, i) => (
-                          <li key={i} className="text-gray-400 text-xs flex gap-2">
-                            <span className="text-blue-500 mt-1">•</span>
+                          <li key={i} className="flex gap-2 text-[12px] text-muted-foreground">
+                            <span className="select-none text-muted-foreground/50" aria-hidden="true">⎿</span>
                             <span className="line-clamp-1">{d}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
-                    <div className="flex gap-2 pt-4 border-t border-white/10">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex-1 border-white/20 text-white"
-                        onClick={() => router.push(`/admin/experience/edit/${exp._id}`)}
-                      >
-                        <Edit className="w-4 h-4 mr-2" /> Edit
+                    <div className="flex gap-2 border-t border-border p-3">
+                      <Button variant="outline" size="sm" className="flex-1" onClick={() => router.push(`/admin/experience/edit/${exp._id}`)}>
+                        <Pencil className="size-3.5" /> Edit
                       </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        className="flex-1 bg-red-500/20 border-red-500/20"
-                        onClick={() => handleDeleteExperience(exp._id)}
-                      >
-                        <Trash2 className="w-4 h-4 mr-2" /> Delete
+                      <Button variant="outline" size="sm" className="flex-1 border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => handleDeleteExperience(exp._id)}>
+                        <Trash2 className="size-3.5" /> Delete
                       </Button>
                     </div>
-                  </GlassCard>
+                  </div>
                 ))}
+                {experiences.length === 0 && <EmptyState label="No experiences yet." />}
               </motion.div>
             ) : activeTab === 'settings' ? (
-              <motion.div
-                key="settings"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-              >
+              <motion.div key="settings" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
                 <AdminSettings />
               </motion.div>
             ) : (
-              <motion.div
-                key="resumes"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-              >
+              <motion.div key="resumes" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
                 <ResumeManager />
               </motion.div>
             )}
           </AnimatePresence>
         )}
       </div>
+    </AdminShell>
+  );
+}
+
+function EmptyState({ label }: { label: string }) {
+  return (
+    <div className="col-span-full py-16 text-center text-[13px] text-muted-foreground">
+      <span className="select-none text-muted-foreground/50">// </span>
+      {label}
     </div>
+  );
+}
+
+export default function AdminDashboardPage() {
+  return (
+    <Suspense fallback={<div className="h-[100dvh] bg-background" />}>
+      <AdminDashboard />
+    </Suspense>
   );
 }

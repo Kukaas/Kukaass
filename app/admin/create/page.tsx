@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Trash2, ArrowLeft } from 'lucide-react';
+import { Plus, Trash2, ArrowLeft, FolderRoot } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import GlassCard from '@/components/GlassCard';
 import { useCreateProject } from '@/hooks/use-projects';
+import AdminShell from '@/components/admin/AdminShell';
 
 export default function CreateProject() {
   const router = useRouter();
@@ -99,58 +99,44 @@ export default function CreateProject() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 p-8">
-      <div className="max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+    <AdminShell activeSection="projects" tabLabel="new-project.tsx" tabIcon={FolderRoot}>
+      <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-border bg-background/80 px-5 py-3 backdrop-blur">
+        <button
+          type="button"
+          onClick={() => router.push('/admin')}
+          className="flex items-center gap-1.5 rounded-md px-2 py-1 text-[12px] text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
         >
-          <div className="flex justify-between items-center mb-6">
-            <div className="flex items-center gap-4">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => router.push('/admin')}
-                className="flex items-center gap-2 text-white hover:text-blue-400 transition-colors duration-200"
-              >
-                <ArrowLeft className="w-5 h-5" />
-                <span className="font-medium">Back to Dashboard</span>
-              </motion.button>
-            </div>
-            <h1 className="text-3xl font-bold text-white">Create New Project</h1>
-          </div>
-        </motion.div>
+          <ArrowLeft className="size-4" /> Back
+        </button>
+        <span className="text-border">/</span>
+        <span className="text-[12px] text-foreground/80">Create new project</span>
+      </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <GlassCard>
+      <div className="mx-auto max-w-4xl p-5">
+        <div className="rounded-lg border border-border bg-card p-6">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                   Title
                 </label>
                 <input
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
+                  className="w-full px-4 py-3 rounded-md border border-border bg-background/40 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand transition-colors"
                   placeholder="Project title"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                   Description
                 </label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
+                  className="w-full px-4 py-3 rounded-md border border-border bg-background/40 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand transition-colors"
                   placeholder="Project description (up to 2000 characters)..."
                   rows={6}
                   required
@@ -158,7 +144,7 @@ export default function CreateProject() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                   Purpose
                 </label>
                 <div className="space-y-3">
@@ -166,7 +152,7 @@ export default function CreateProject() {
                     <input
                       type="text"
                       id="purposeInput"
-                      className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
+                      className="flex-1 px-4 py-3 rounded-md border border-border bg-background/40 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand transition-colors"
                       placeholder="Add a purpose (e.g., Portfolio, Learning)"
                       onKeyPress={(e) => {
                         if (e.key === 'Enter') {
@@ -192,7 +178,7 @@ export default function CreateProject() {
                           input.value = '';
                         }
                       }}
-                      className="px-4 py-3 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 border border-green-500/30 flex items-center gap-2 transition-colors"
+                      className="flex items-center gap-2 rounded-md border border-brand/30 bg-brand/15 px-4 py-3 text-brand transition-colors hover:bg-brand/25"
                     >
                       <Plus className="w-4 h-4" />
                       Add
@@ -206,9 +192,9 @@ export default function CreateProject() {
                           key={index}
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1 }}
-                          className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-lg px-3 py-2"
+                          className="flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2"
                         >
-                          <span className="text-white text-sm">{purpose}</span>
+                          <span className="text-foreground text-sm">{purpose}</span>
                           <motion.button
                             type="button"
                             whileHover={{ scale: 1.1 }}
@@ -217,7 +203,7 @@ export default function CreateProject() {
                               const newPurpose = formData.purpose.filter((_, i) => i !== index);
                               setFormData({ ...formData, purpose: newPurpose });
                             }}
-                            className="text-red-400 hover:text-red-300 transition-colors"
+                            className="text-destructive hover:text-destructive/80 transition-colors"
                           >
                             <Trash2 className="w-3 h-3" />
                           </motion.button>
@@ -230,28 +216,28 @@ export default function CreateProject() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                     Link
                   </label>
                   <input
                     type="url"
                     value={formData.link}
                     onChange={(e) => setFormData({ ...formData, link: e.target.value })}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
+                    className="w-full px-4 py-3 rounded-md border border-border bg-background/40 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand transition-colors"
                     placeholder="https://example.com"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                     GitHub Link
                   </label>
                   <input
                     type="url"
                     value={formData.githubLink}
                     onChange={(e) => setFormData({ ...formData, githubLink: e.target.value })}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
+                    className="w-full px-4 py-3 rounded-md border border-border bg-background/40 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand transition-colors"
                     placeholder="https://github.com/username/repo"
                   />
                 </div>
@@ -262,9 +248,9 @@ export default function CreateProject() {
                     id="isPrivate"
                     checked={formData.isPrivate}
                     onChange={(e) => setFormData({ ...formData, isPrivate: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 bg-white/10 border-white/20 rounded focus:ring-blue-500 focus:ring-2"
+                    className="size-4 rounded border-border bg-background text-brand accent-brand focus:ring-2 focus:ring-ring/50"
                   />
-                  <label htmlFor="isPrivate" className="text-sm font-medium text-gray-300">
+                  <label htmlFor="isPrivate" className="text-sm font-medium text-foreground/80">
                     Private Repository
                   </label>
                 </div>
@@ -272,40 +258,40 @@ export default function CreateProject() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                     Role
                   </label>
                   <input
                     type="text"
                     value={formData.role}
                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
+                    className="w-full px-4 py-3 rounded-md border border-border bg-background/40 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand transition-colors"
                     placeholder="e.g., Full-stack Developer"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                     Start Date *
                   </label>
                   <input
                     type="date"
                     value={formData.startDate}
                     onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
+                    className="w-full px-4 py-3 rounded-md border border-border bg-background/40 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand transition-colors"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                     End Date
                   </label>
                   <input
                     type="date"
                     value={formData.endDate}
                     onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
+                    className="w-full px-4 py-3 rounded-md border border-border bg-background/40 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand transition-colors"
                     disabled={formData.isOngoing}
                   />
                   <div className="flex items-center space-x-3 mt-3">
@@ -314,22 +300,22 @@ export default function CreateProject() {
                       id="isOngoing"
                       checked={formData.isOngoing}
                       onChange={(e) => setFormData({ ...formData, isOngoing: e.target.checked })}
-                      className="w-4 h-4 text-blue-600 bg-white/10 border-white/20 rounded focus:ring-blue-500 focus:ring-2"
+                      className="size-4 rounded border-border bg-background text-brand accent-brand focus:ring-2 focus:ring-ring/50"
                     />
-                    <label htmlFor="isOngoing" className="text-sm font-medium text-gray-300">
+                    <label htmlFor="isOngoing" className="text-sm font-medium text-foreground/80">
                       Still working on this project
                     </label>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                     Status
                   </label>
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value as 'completed' | 'in-progress' | 'planned' })}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-white/40 transition-colors"
+                    className="w-full px-4 py-3 rounded-md border border-border bg-background/40 text-foreground focus:outline-none focus:border-brand transition-colors"
                   >
                     <option value="completed">Completed</option>
                     <option value="in-progress">In Progress</option>
@@ -339,7 +325,7 @@ export default function CreateProject() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                   Tech Stack
                 </label>
                 <div className="space-y-3">
@@ -347,7 +333,7 @@ export default function CreateProject() {
                     <input
                       type="text"
                       id="techInput"
-                      className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
+                      className="flex-1 px-4 py-3 rounded-md border border-border bg-background/40 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand transition-colors"
                       placeholder="Add a technology (e.g., React)"
                       onKeyPress={(e) => {
                         if (e.key === 'Enter') {
@@ -373,7 +359,7 @@ export default function CreateProject() {
                           input.value = '';
                         }
                       }}
-                      className="px-4 py-3 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 border border-green-500/30 flex items-center gap-2 transition-colors"
+                      className="flex items-center gap-2 rounded-md border border-brand/30 bg-brand/15 px-4 py-3 text-brand transition-colors hover:bg-brand/25"
                     >
                       <Plus className="w-4 h-4" />
                       Add
@@ -387,9 +373,9 @@ export default function CreateProject() {
                           key={index}
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1 }}
-                          className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-lg px-3 py-2"
+                          className="flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2"
                         >
-                          <span className="text-white text-sm">{tech}</span>
+                          <span className="text-foreground text-sm">{tech}</span>
                           <motion.button
                             type="button"
                             whileHover={{ scale: 1.1 }}
@@ -398,7 +384,7 @@ export default function CreateProject() {
                               const newTechStack = formData.techStack.filter((_, i) => i !== index);
                               setFormData({ ...formData, techStack: newTechStack });
                             }}
-                            className="text-red-400 hover:text-red-300 transition-colors"
+                            className="text-destructive hover:text-destructive/80 transition-colors"
                           >
                             <Trash2 className="w-3 h-3" />
                           </motion.button>
@@ -410,7 +396,7 @@ export default function CreateProject() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                   Features
                 </label>
                 <div className="space-y-3">
@@ -418,7 +404,7 @@ export default function CreateProject() {
                     <input
                       type="text"
                       id="featureInput"
-                      className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
+                      className="flex-1 px-4 py-3 rounded-md border border-border bg-background/40 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand transition-colors"
                       placeholder="Add a feature (e.g., User authentication)"
                       onKeyPress={(e) => {
                         if (e.key === 'Enter') {
@@ -444,7 +430,7 @@ export default function CreateProject() {
                           input.value = '';
                         }
                       }}
-                      className="px-4 py-3 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 border border-green-500/30 flex items-center gap-2 transition-colors"
+                      className="flex items-center gap-2 rounded-md border border-brand/30 bg-brand/15 px-4 py-3 text-brand transition-colors hover:bg-brand/25"
                     >
                       <Plus className="w-4 h-4" />
                       Add
@@ -458,9 +444,9 @@ export default function CreateProject() {
                           key={index}
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1 }}
-                          className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-lg px-3 py-2"
+                          className="flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2"
                         >
-                          <span className="text-white text-sm">{feature}</span>
+                          <span className="text-foreground text-sm">{feature}</span>
                           <motion.button
                             type="button"
                             whileHover={{ scale: 1.1 }}
@@ -469,7 +455,7 @@ export default function CreateProject() {
                               const newFeatures = formData.features.filter((_, i) => i !== index);
                               setFormData({ ...formData, features: newFeatures });
                             }}
-                            className="text-red-400 hover:text-red-300 transition-colors"
+                            className="text-destructive hover:text-destructive/80 transition-colors"
                           >
                             <Trash2 className="w-3 h-3" />
                           </motion.button>
@@ -482,7 +468,7 @@ export default function CreateProject() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                     Challenges
                   </label>
                   <div className="space-y-3">
@@ -490,7 +476,7 @@ export default function CreateProject() {
                       <input
                         type="text"
                         id="challengeInput"
-                        className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
+                        className="flex-1 px-4 py-3 rounded-md border border-border bg-background/40 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand transition-colors"
                         placeholder="Add a challenge"
                         onKeyPress={(e) => {
                           if (e.key === 'Enter') {
@@ -516,7 +502,7 @@ export default function CreateProject() {
                             input.value = '';
                           }
                         }}
-                        className="px-4 py-3 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 border border-green-500/30 flex items-center gap-2 transition-colors"
+                        className="flex items-center gap-2 rounded-md border border-brand/30 bg-brand/15 px-4 py-3 text-brand transition-colors hover:bg-brand/25"
                       >
                         <Plus className="w-4 h-4" />
                         Add
@@ -530,9 +516,9 @@ export default function CreateProject() {
                             key={index}
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-lg px-3 py-2"
+                            className="flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2"
                           >
-                            <span className="text-white text-sm">{challenge}</span>
+                            <span className="text-foreground text-sm">{challenge}</span>
                             <motion.button
                               type="button"
                               whileHover={{ scale: 1.1 }}
@@ -541,7 +527,7 @@ export default function CreateProject() {
                                 const newChallenges = formData.challenges.filter((_, i) => i !== index);
                                 setFormData({ ...formData, challenges: newChallenges });
                               }}
-                              className="text-red-400 hover:text-red-300 transition-colors"
+                              className="text-destructive hover:text-destructive/80 transition-colors"
                             >
                               <Trash2 className="w-3 h-3" />
                             </motion.button>
@@ -553,7 +539,7 @@ export default function CreateProject() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                     Solutions
                   </label>
                   <div className="space-y-3">
@@ -561,7 +547,7 @@ export default function CreateProject() {
                       <input
                         type="text"
                         id="solutionInput"
-                        className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 transition-colors"
+                        className="flex-1 px-4 py-3 rounded-md border border-border bg-background/40 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand transition-colors"
                         placeholder="Add a solution"
                         onKeyPress={(e) => {
                           if (e.key === 'Enter') {
@@ -587,7 +573,7 @@ export default function CreateProject() {
                             input.value = '';
                           }
                         }}
-                        className="px-4 py-3 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 border border-green-500/30 flex items-center gap-2 transition-colors"
+                        className="flex items-center gap-2 rounded-md border border-brand/30 bg-brand/15 px-4 py-3 text-brand transition-colors hover:bg-brand/25"
                       >
                         <Plus className="w-4 h-4" />
                         Add
@@ -601,9 +587,9 @@ export default function CreateProject() {
                             key={index}
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-lg px-3 py-2"
+                            className="flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2"
                           >
-                            <span className="text-white text-sm">{solution}</span>
+                            <span className="text-foreground text-sm">{solution}</span>
                             <motion.button
                               type="button"
                               whileHover={{ scale: 1.1 }}
@@ -612,7 +598,7 @@ export default function CreateProject() {
                                 const newSolutions = formData.solutions.filter((_, i) => i !== index);
                                 setFormData({ ...formData, solutions: newSolutions });
                               }}
-                              className="text-red-400 hover:text-red-300 transition-colors"
+                              className="text-destructive hover:text-destructive/80 transition-colors"
                             >
                               <Trash2 className="w-3 h-3" />
                             </motion.button>
@@ -625,14 +611,14 @@ export default function CreateProject() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                   Project Images
                 </label>
 
                 {/* Image Preview */}
                 {selectedFiles.length > 0 && (
                   <div className="mb-4">
-                    <p className="text-sm text-gray-400 mb-2">Preview ({selectedFiles.length} images):</p>
+                    <p className="text-sm text-muted-foreground mb-2">Preview ({selectedFiles.length} images):</p>
                     <div className="flex flex-wrap gap-3">
                       {selectedFiles.map((file, index) => (
                         <div key={index} className="relative">
@@ -641,7 +627,7 @@ export default function CreateProject() {
                             alt={`Preview ${index + 1}`}
                             width={96}
                             height={96}
-                            className="w-24 h-24 object-cover rounded-lg border border-white/20"
+                            className="w-24 h-24 object-cover rounded-md border border-border"
                           />
                           <motion.button
                             type="button"
@@ -651,7 +637,7 @@ export default function CreateProject() {
                               const newFiles = selectedFiles.filter((_, i) => i !== index);
                               setSelectedFiles(newFiles);
                             }}
-                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                            className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-destructive/90 transition-colors"
                           >
                             <Trash2 className="w-3 h-3" />
                           </motion.button>
@@ -669,9 +655,9 @@ export default function CreateProject() {
                     const newFiles = Array.from(e.target.files || []);
                     setSelectedFiles(prev => [...prev, ...newFiles]); // Append new files to existing ones
                   }}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/40 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-white file:text-black hover:file:bg-gray-100 transition-colors"
+                  className="w-full rounded-md border border-border bg-background/40 px-4 py-3 text-foreground transition-colors focus:border-brand focus:outline-none file:mr-4 file:rounded-md file:border-0 file:bg-brand file:px-4 file:py-2 file:text-sm file:font-semibold file:text-brand-foreground hover:file:bg-brand-deep"
                 />
-                <p className="text-xs text-gray-400 mt-2">You can select multiple images. The first image will be used as the main preview.</p>
+                <p className="text-xs text-muted-foreground mt-2">You can select multiple images. The first image will be used as the main preview.</p>
               </div>
 
               <div className="flex gap-4 pt-6">
@@ -680,28 +666,27 @@ export default function CreateProject() {
                   disabled={uploading}
                   whileHover={{ scale: uploading ? 1 : 1.02 }}
                   whileTap={{ scale: uploading ? 1 : 0.98 }}
-                  className={`px-8 py-3 rounded-lg font-medium transition-all ${
+                  className={`rounded-md px-8 py-3 font-medium transition-colors ${
                     uploading
-                      ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
-                      : 'bg-white text-black hover:bg-gray-100 shadow-lg hover:shadow-xl'
+                      ? 'cursor-not-allowed bg-muted text-muted-foreground'
+                      : 'bg-brand text-brand-foreground hover:bg-brand-deep'
                   }`}
                 >
-                  {uploading ? 'Creating...' : 'Create Project'}
+                  {uploading ? 'Creating…' : 'Create project'}
                 </motion.button>
                 <motion.button
                   type="button"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => router.push('/admin')}
-                  className="border border-white/30 text-white px-8 py-3 rounded-lg font-medium hover:bg-white/5 transition-colors"
+                  className="rounded-md border border-border px-8 py-3 font-medium text-foreground transition-colors hover:bg-accent"
                 >
                   Cancel
                 </motion.button>
               </div>
             </form>
-          </GlassCard>
-        </motion.div>
+        </div>
       </div>
-    </div>
+    </AdminShell>
   );
 }
