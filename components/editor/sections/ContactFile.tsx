@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Mail, Copy, Check, FileDown, Loader2, ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useEditor } from '../EditorContext';
+import ContactForm from '../ContactForm';
 import { PROFILE, SOCIALS } from '../data';
 
 export default function ContactFile() {
@@ -56,6 +57,11 @@ export default function ContactFile() {
             </>
           )}
         </button>
+      </div>
+
+      {/* Direct message form */}
+      <div className="mt-8">
+        <ContactForm />
       </div>
 
       {/* Other channels */}

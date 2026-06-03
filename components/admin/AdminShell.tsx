@@ -6,6 +6,7 @@ import {
   FolderRoot,
   Briefcase,
   FileText,
+  Inbox,
   Settings,
   LogOut,
   SquareArrowOutUpRight,
@@ -14,7 +15,7 @@ import {
 import { cn } from '@/lib/utils';
 import { applyTheme, loadThemeId, themeById } from '@/components/editor/theme';
 
-export type AdminSection = 'projects' | 'experiences' | 'resumes' | 'settings';
+export type AdminSection = 'projects' | 'experiences' | 'resumes' | 'messages' | 'settings';
 
 interface NavItem {
   section: AdminSection;
@@ -26,6 +27,7 @@ const NAV: NavItem[] = [
   { section: 'projects', label: 'Projects', icon: FolderRoot },
   { section: 'experiences', label: 'Experiences', icon: Briefcase },
   { section: 'resumes', label: 'Resumes', icon: FileText },
+  { section: 'messages', label: 'Messages', icon: Inbox },
   { section: 'settings', label: 'Settings', icon: Settings },
 ];
 

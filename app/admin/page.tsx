@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Pencil, Trash2, FolderRoot, Briefcase, FileText, Settings, FileCode2, ImageOff } from 'lucide-react';
+import { Plus, Pencil, Trash2, FolderRoot, Briefcase, FileText, Inbox, Settings, FileCode2, ImageOff } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -11,12 +11,14 @@ import { useExperiences, useDeleteExperience } from '@/hooks/use-experiences';
 import { format } from 'date-fns';
 import ResumeManager from '@/components/admin/ResumeManager';
 import AdminSettings from '@/components/admin/AdminSettings';
+import MessagesManager from '@/components/admin/MessagesManager';
 import AdminShell, { type AdminSection } from '@/components/admin/AdminShell';
 
 const TAB_META: Record<AdminSection, { tabLabel: string; tabIcon: typeof FileCode2; title: string }> = {
   projects: { tabLabel: 'projects.tsx', tabIcon: FolderRoot, title: 'Projects' },
   experiences: { tabLabel: 'experiences.tsx', tabIcon: Briefcase, title: 'Experiences' },
   resumes: { tabLabel: 'resumes.json', tabIcon: FileText, title: 'Resumes' },
+  messages: { tabLabel: 'messages.inbox', tabIcon: Inbox, title: 'Messages' },
   settings: { tabLabel: 'settings.json', tabIcon: Settings, title: 'Settings' },
 };
 
@@ -169,6 +171,10 @@ function AdminDashboard() {
                   </div>
                 ))}
                 {experiences.length === 0 && <EmptyState label="No experiences yet." />}
+              </motion.div>
+            ) : activeTab === 'messages' ? (
+              <motion.div key="messages" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
+                <MessagesManager />
               </motion.div>
             ) : activeTab === 'settings' ? (
               <motion.div key="settings" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
