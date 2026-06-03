@@ -1,8 +1,9 @@
 'use client';
 
-import { Files, Search, SquareTerminal, Sparkles, FileDown, Loader2 } from 'lucide-react';
+import { Files, Search, SquareTerminal, FileDown, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useEditor } from './EditorContext';
+import AssistantIcon from './AssistantIcon';
 import SettingsMenu from './SettingsMenu';
 
 interface RailButtonProps {
@@ -60,7 +61,7 @@ export default function ActivityBar() {
         <SquareTerminal className="size-5" aria-hidden="true" />
       </RailButton>
       <RailButton label="AI assistant" active={assistantOpen} onClick={toggleAssistant}>
-        <Sparkles className="size-5" aria-hidden="true" />
+        <AssistantIcon className="size-5" />
       </RailButton>
       <RailButton label="Download résumé" onClick={downloadResume}>
         {resumeLoading ? (

@@ -8,7 +8,12 @@ import { FILES } from './files';
 import { projectKey, slugify } from './tabs';
 import { useProjects } from '@/hooks/use-projects';
 
-export default function FileExplorer() {
+/**
+ * The file tree. `showHeader` renders the "Explorer" caption; the mobile drawer
+ * supplies its own header, so it passes `showHeader={false}` to avoid a doubled
+ * title.
+ */
+export default function FileExplorer({ showHeader = true }: { showHeader?: boolean }) {
   const { activeKey, openFile, openProject, downloadResume, resumeLoading } = useEditor();
   const { data: projects } = useProjects();
   const [projectsExpanded, setProjectsExpanded] = useState(false);
@@ -18,11 +23,13 @@ export default function FileExplorer() {
 
   return (
     <div className="flex h-full select-none flex-col bg-card">
-      <div className="flex h-8 shrink-0 items-center px-3">
-        <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-          Explorer
-        </span>
-      </div>
+      {showHeader && (
+        <div className="flex h-8 shrink-0 items-center px-3">
+          <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+            Explorer
+          </span>
+        </div>
+      )}
 
       <div className="editor-scroll min-h-0 flex-1 overflow-y-auto pb-4">
         {/* Root folder */}

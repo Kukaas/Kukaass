@@ -366,7 +366,7 @@ export default function EditorShell() {
                   </button>
                 </div>
                 <div className="min-h-0 flex-1">
-                  <FileExplorer />
+                  <FileExplorer showHeader={false} />
                 </div>
               </motion.div>
             </motion.div>

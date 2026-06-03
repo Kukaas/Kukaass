@@ -1,6 +1,7 @@
 'use client';
 
 import { Command } from 'cmdk';
+import { Title as DialogTitle } from '@radix-ui/react-dialog';
 import { ChevronRight, FileDown, SquareTerminal, Sparkles, Copy, Github, Linkedin, FileCode2, Keyboard, Palette, Check } from 'lucide-react';
 import { useEditor } from './EditorContext';
 import { FILES, type FileId } from './files';
@@ -46,6 +47,8 @@ export default function CommandPalette() {
       contentClassName="fixed left-1/2 top-[14vh] z-50 w-[92vw] max-w-xl -translate-x-1/2"
       className="overflow-hidden rounded-xl border border-border bg-popover font-mono shadow-[0_16px_48px_-12px_rgba(0,0,0,0.55)]"
     >
+      {/* Accessible name for the dialog (visually hidden); Radix requires a Title. */}
+      <DialogTitle className="sr-only">Command palette</DialogTitle>
       <div className="flex items-center gap-2 border-b border-border px-3">
         <ChevronRight className="size-4 text-brand" aria-hidden="true" />
         <Command.Input
