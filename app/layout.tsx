@@ -19,10 +19,17 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-// The canonical origin. Everything below derives from it so the structured data
-// can never drift onto a different host than the canonical/OG URLs — it used to
-// claim kukaass.vercel.app while every other signal said www.kukaass.app.
-const SITE_URL = "https://www.kukaass.app";
+// The canonical origin: the apex, no www. Everything below derives from it so
+// the structured data can never drift onto a different host than the
+// canonical/OG URLs — it used to claim kukaass.vercel.app while every other
+// signal said www.kukaass.app.
+//
+// This must agree with the host Vercel treats as primary. If www is primary
+// there, www serves 200 and the apex 308-redirects to it, so a page reachable
+// at www would be claiming a canonical that redirects away from itself — and
+// Google discards a canonical it can't confirm. Apex must be the primary
+// domain, with www redirecting to it.
+const SITE_URL = "https://kukaass.app";
 
 // The site name Google prints above the URL in a search result. Short and
 // commonly-recognized on purpose: a title-shaped name ("… Portfolio",
