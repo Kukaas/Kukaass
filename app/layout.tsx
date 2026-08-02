@@ -19,53 +19,92 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-// Person structured data. Rendered server-side in <head> so it stays stable and
-// does not collide with client-injected third-party scripts during hydration.
+// The canonical origin. Everything below derives from it so the structured data
+// can never drift onto a different host than the canonical/OG URLs — it used to
+// claim kukaass.vercel.app while every other signal said www.kukaass.app.
+const SITE_URL = "https://www.kukaass.app";
+
+// The site name Google prints above the URL in a search result. Short and
+// commonly-recognized on purpose: a title-shaped name ("… Portfolio",
+// "Name | Job Title") gets declined and Google falls back to the bare domain.
+// This must stay byte-identical to `openGraph.siteName` below — those are
+// Google's #1 and #2 signals, and it wants them agreeing.
+const SITE_NAME = "Kukaass";
+
+const PERSON_ID = `${SITE_URL}/#person`;
+
+// WebSite + Person structured data, in one @graph so the site and the person
+// behind it are linked rather than two unrelated nodes. Rendered server-side in
+// <head> so it stays stable and does not collide with client-injected
+// third-party scripts during hydration.
 const structuredData = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Chester Luke A. Maligaso",
-  "alternateName": ["Chester Maligaso", "Chester Luke", "Kukaass"],
-  "jobTitle": "Full-Stack Software Developer",
-  "description": "Full-Stack Developer specializing in MERN stack, Laravel, React, Node.js, and modern web solutions. Based in the Philippines.",
-  "url": "https://kukaass.vercel.app",
-  "image": "https://kukaass.vercel.app/logo.jpeg",
-  "sameAs": [
-    "https://github.com/Kukaas",
-    "https://www.linkedin.com/in/chester-luke-maligaso-812732359",
-    "https://www.facebook.com/kukaass.dev/",
-    "https://www.tiktok.com/@kukaassdev",
-    "https://www.instagram.com/itsmechester_/"
-  ],
-  "knowsAbout": [
-    "Software Engineering",
-    "Full-Stack Development",
-    "MERN Stack",
-    "Laravel",
-    "React",
-    "Node.js",
-    "JavaScript",
-    "TypeScript",
-    "PHP",
-    "MongoDB",
-    "MySQL",
-    "Next.js",
-    "REST APIs",
-    "Database Design"
-  ],
-  "worksFor": {
-    "@type": "Organization",
-    "name": "Freelance / Open for Opportunities"
-  },
-  "hasOccupation": {
-    "@type": "Occupation",
-    "name": "Software Developer",
-    "occupationLocation": {
-      "@type": "City",
-      "name": "Manila"
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      "name": SITE_NAME,
+      // Fallbacks Google may pick from if it declines the name above, most to
+      // least preferred. The bare host is last: Google documents a lowercase
+      // domain as the final backup.
+      "alternateName": [
+        "Chester Luke A. Maligaso",
+        "Chester Luke A. Maligaso Portfolio",
+        "kukaass.app"
+      ],
+      "url": SITE_URL,
+      "description": "Portfolio of Chester Luke A. Maligaso (Kukaass), a Full-Stack Developer specializing in MERN stack, Laravel, React, Node.js, and modern web solutions.",
+      "inLanguage": "en",
+      "publisher": { "@id": PERSON_ID },
+      "author": { "@id": PERSON_ID }
     },
-    "skills": "React, Node.js, Laravel, MongoDB, SQL"
-  }
+    {
+      "@type": "Person",
+      "@id": PERSON_ID,
+      "name": "Chester Luke A. Maligaso",
+      "alternateName": ["Chester Maligaso", "Chester Luke", "Kukaass"],
+      "jobTitle": "Full-Stack Software Developer",
+      "description": "Full-Stack Developer specializing in MERN stack, Laravel, React, Node.js, and modern web solutions. Based in the Philippines.",
+      "url": SITE_URL,
+      "image": `${SITE_URL}/logo.jpeg`,
+      "sameAs": [
+        "https://github.com/Kukaas",
+        "https://www.linkedin.com/in/chester-luke-maligaso-812732359",
+        "https://www.facebook.com/kukaass.dev/",
+        "https://www.tiktok.com/@kukaassdev",
+        "https://www.instagram.com/itsmechester_/"
+      ],
+      "knowsAbout": [
+        "Software Engineering",
+        "Full-Stack Development",
+        "MERN Stack",
+        "Laravel",
+        "React",
+        "Node.js",
+        "JavaScript",
+        "TypeScript",
+        "PHP",
+        "MongoDB",
+        "MySQL",
+        "Next.js",
+        "REST APIs",
+        "Database Design"
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Freelance / Open for Opportunities"
+      },
+      "hasOccupation": {
+        "@type": "Occupation",
+        "name": "Software Developer",
+        "occupationLocation": {
+          "@type": "City",
+          "name": "Manila"
+        },
+        "skills": "React, Node.js, Laravel, MongoDB, SQL"
+      }
+    }
+  ]
 };
 
 export const metadata: Metadata = {
@@ -111,8 +150,10 @@ export const metadata: Metadata = {
     description: "Explore the portfolio of Chester Luke A. Maligaso (Kukaass), a Full-Stack Developer specializing in building modern, scalable web applications.",
     type: "website",
     locale: "en_US",
-    siteName: "Chester Luke A. Maligaso Portfolio",
-    url: "https://www.kukaass.app",
+    // Google's second-choice source for the site name, after the WebSite
+    // JSON-LD. Must match it, or the two signals compete and neither wins.
+    siteName: SITE_NAME,
+    url: SITE_URL,
     images: [
       {
         url: "/logo.jpeg",
@@ -156,9 +197,9 @@ export const metadata: Metadata = {
     ],
   },
   alternates: {
-    canonical: "https://www.kukaass.app/",
+    canonical: `${SITE_URL}/`,
   },
-  metadataBase: new URL('https://www.kukaass.app'),
+  metadataBase: new URL(SITE_URL),
 };
 
 export default function RootLayout({
@@ -180,14 +221,8 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
-        <meta name="google-site-verification" content="-TXhZVd-r4o9jU4MDbDqfFDGOX6axZ5I-doaLReJ5ec" />
-        <meta name="msvalidate.01" content="C77691FD4D0CFBB0AE2FB1AE6C4C552F" />
         <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
-        <link rel="sitemap" type="application/xml" title="Sitemap" href="https://www.kukaass.app/sitemap.xml" />
-        <meta name="robots" content="index, follow" />
-        <meta name="googlebot" content="index, follow" />
         <meta name="googlebot-news" content="nosnippet" />
-        <link rel="canonical" href="https://www.kukaass.app/" />
 
         {/* Favicon links for better browser and search engine support */}
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
