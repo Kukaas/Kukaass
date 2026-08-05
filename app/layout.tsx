@@ -4,7 +4,6 @@ import Providers from "./providers";
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import './globals.css'
-import { Honeybadger, HoneybadgerErrorBoundary } from "@honeybadger-io/react";
 
 // Geist Sans carries reading prose; Geist Mono carries all editor chrome
 // (file tree, tabs, status bar, terminal). See DESIGN.md "Filament Dark".
@@ -241,13 +240,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground overflow-x-hidden`}
       >
-        <HoneybadgerErrorBoundary honeybadger={Honeybadger}>
-          <Providers>
-            {children}
-          </Providers>
-          <Analytics />
-          <SpeedInsights />
-        </HoneybadgerErrorBoundary>
+        <Providers>
+          {children}
+        </Providers>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
