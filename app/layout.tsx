@@ -63,7 +63,20 @@ const structuredData = {
       "description": "Portfolio of Chester Luke A. Maligaso (Kukaass), a Full-Stack Developer specializing in MERN stack, Laravel, React, Node.js, and modern web solutions.",
       "inLanguage": "en",
       "publisher": { "@id": PERSON_ID },
-      "author": { "@id": PERSON_ID }
+      "author": { "@id": PERSON_ID },
+      "hasPart": [
+        {
+          "@type": "WebApplication",
+          "name": "qrty",
+          "alternateName": ["qrty — 3D QR Code Generator", "qwerty qr", "qrty.kukaass.app"],
+          "url": "https://qrty.kukaass.app",
+          "applicationCategory": "DesignApplication, UtilityApplication",
+          "operatingSystem": "All",
+          "description": "Free high-precision 3D QR code generator. Transform links into interactive 3D WebGL dioramas and high-contrast scannable QR codes with Level H error correction.",
+          "author": { "@id": PERSON_ID },
+          "publisher": { "@id": PERSON_ID }
+        }
+      ]
     },
     {
       "@type": "Person",
@@ -110,6 +123,47 @@ const structuredData = {
         },
         "skills": "React, Node.js, Laravel, MongoDB, SQL"
       }
+    },
+    {
+      "@type": "ItemList",
+      "name": "Primary Navigation & Products",
+      "itemListElement": [
+        {
+          "@type": "SiteNavigationElement",
+          "position": 1,
+          "name": "qrty — 3D QR Generator",
+          "description": "Interactive 3D WebGL QR code generator studio with Level H error correction.",
+          "url": "https://qrty.kukaass.app"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 2,
+          "name": "About",
+          "description": "Full-Stack Developer background, technical journey, and software engineering philosophy.",
+          "url": `${SITE_URL}/#about`
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 3,
+          "name": "Projects",
+          "description": "Selected software engineering projects, web applications, and systems built by Chester Luke Maligaso.",
+          "url": `${SITE_URL}/#projects`
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 4,
+          "name": "Experience",
+          "description": "Professional software development roles, engineering experience, and career milestones.",
+          "url": `${SITE_URL}/#experience`
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 5,
+          "name": "Contact",
+          "description": "Get in touch with Chester Luke Maligaso for full-stack software development projects and collaborations.",
+          "url": `${SITE_URL}/#contact`
+        }
+      ]
     }
   ]
 };
@@ -136,7 +190,11 @@ export const metadata: Metadata = {
     "MongoDB",
     "MySQL",
     "Portfolio",
-    "Software Development"
+    "Software Development",
+    "qrty",
+    "qrty 3D QR generator",
+    "qwerty qr",
+    "qrty.kukaass.app"
   ],
   authors: [{ name: "Chester Luke A. Maligaso" }],
   creator: "Chester Luke A. Maligaso",
