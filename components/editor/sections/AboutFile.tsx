@@ -1,10 +1,10 @@
 'use client';
 
 const capabilities: { area: string; detail: string }[] = [
-  { area: 'Frontend', detail: 'React, Next.js, TypeScript, Tailwind CSS' },
-  { area: 'Backend', detail: 'Node.js, Express, Laravel, PHP' },
-  { area: 'Data', detail: 'MongoDB, MySQL, Mongoose, REST APIs' },
-  { area: 'Delivery', detail: 'Docker, Linux, Vercel, end-to-end ownership' },
+  { area: 'Frontend', detail: 'React, Next.js, Angular, TypeScript, Tailwind CSS' },
+  { area: 'Backend', detail: 'Node.js, Express, Laravel, PHP, REST APIs' },
+  { area: 'Data', detail: 'PostgreSQL, Postgres, MongoDB, MySQL, Prisma, Mongoose' },
+  { area: 'DevOps & Cloud', detail: 'CI/CD, Docker, Linux VM, AWS, GCP, Vercel' },
 ];
 
 export default function AboutFile() {
@@ -18,8 +18,9 @@ export default function AboutFile() {
 
       <div className="mt-6 space-y-4 font-sans text-[15px] leading-relaxed text-foreground/80">
         <p>
-          I&apos;m a full-stack developer who ships web applications end to end. I work primarily
-          across the MERN stack and Laravel, and I&apos;m comfortable owning a feature from the
+          I&apos;m Chester Luke Maligaso (known as Chester Maligaso or Kukaass), a full-stack
+          developer who ships web applications end to end. I work primarily across Next.js, React,
+          Node.js, the MERN stack, and Laravel, and I&apos;m comfortable owning a feature from the
           database schema and API up to the interface people actually use.
         </p>
         <p>

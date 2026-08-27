@@ -20,6 +20,7 @@ export interface Project {
   role?: string;
   status: 'completed' | 'in-progress' | 'planned';
   createdAt: string | Date;
+  updatedAt?: string | Date;
   isPrivate?: boolean;
 }
 

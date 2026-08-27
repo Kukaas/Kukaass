@@ -40,7 +40,7 @@ export default function HomeFile() {
         className="font-sans text-4xl font-semibold leading-[1.05] tracking-tight text-foreground sm:text-5xl"
         style={{ textWrap: 'balance' }}
       >
-        Hi, I&apos;m Chester.
+        Hi, I&apos;m Chester <span className="sr-only">Luke Maligaso (Chester Maligaso)</span>.
       </motion.h1>
 
       <motion.p
@@ -48,9 +48,9 @@ export default function HomeFile() {
         className="mt-5 max-w-[60ch] font-sans text-base leading-relaxed text-foreground/75 sm:text-lg"
         style={{ textWrap: 'pretty' }}
       >
-        I build full-stack web apps with React, Next.js, Node.js, and Laravel, from database schema
-        to production deploy. Right now I&apos;m shipping projects across the MERN stack and looking
-        for the next team to build with.
+        I&apos;m Chester Maligaso, a full-stack developer building modern web applications with
+        React, Next.js, Node.js, and Laravel, from database schema to production deploy. Right now
+        I&apos;m shipping projects across the MERN stack and looking for the next team to build with.
       </motion.p>
 
       <motion.div {...rise(0.18)} className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">

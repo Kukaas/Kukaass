@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.2] - 2026-08-27
+
+### Added
+- **SEO & Google Search Entity Optimization**:
+  - Direct search index targeting for "Chester Maligaso", "Chester Luke Maligaso", "Chester Luke", "Maligaso", and "Kukaass" across page meta tags, OpenGraph, and Twitter summaries.
+  - Implemented Schema.org `ProfilePage` structured data with explicit `mainEntity` mapping to Chester's `Person` node.
+  - Expanded `Person` schema with `givenName`, `familyName`, `additionalName`, and comprehensive `alternateName` array for exact Google Knowledge Graph entity resolution.
+  - Added Schema.org `BreadcrumbList` structured data on the homepage and dynamic project detail views (`/projects/[id]`).
+  - Added dynamic sitemap generation (`app/sitemap.ts`) ensuring all project detail routes are submitted for Google crawl indexing.
+- **Tech Stack & DevOps Capabilities**:
+  - Added Angular, PostgreSQL/Postgres, CI/CD, AWS, GCP (Google Cloud Platform), Linux VM, and DevOps tools to `stack.config.ts`, `AboutFile.tsx`, and schema `knowsAbout`.
+- **QRTY 3D QR Generator Brand & Search Visibility**:
+  - Generated full Google-compliant icon suite (48x48, 96x96, 192x192, 512x512, apple-touch-icon 180x180, and multi-size ICO with 48px+ resolutions) so Google search snippets display the tactical QRTY logo.
+  - Added high-resolution OpenGraph preview image (`og-image.png`) and schema `image`/`logo` properties.
+  - Standardized clean single-domain breadcrumb hierarchy (`qrty` > `Studio`) for Google rich snippet display.
+
+### Fixed
+- Fixed missing `updatedAt` field on the `Project` interface in `hooks/use-projects.ts`.
+- Restored truncated `framer-motion` and `@tanstack/react-query` package type definitions.
+- Hardened database connection in `lib/db.ts` to defer `MONGODB_URI` environment validation to runtime connection requests, avoiding build-time static evaluation crashes.
+
 ## [2.1.1] - 2026-02-17
 
 ### Added

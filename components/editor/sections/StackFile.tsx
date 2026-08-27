@@ -15,11 +15,11 @@ const GROUPS: Group[] = [
   {
     key: 'frontend',
     note: 'interfaces & interaction',
-    items: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'shadcn/ui', 'TanStack Query', 'Framer Motion'],
+    items: ['React', 'Next.js', 'Angular', 'TypeScript', 'Tailwind CSS', 'shadcn/ui', 'TanStack Query', 'Framer Motion'],
   },
   { key: 'backend', note: 'APIs & services', items: ['Node.js', 'Express', 'NestJS', 'Laravel', 'PHP'] },
-  { key: 'data', note: 'storage & modelling', items: ['MongoDB', 'PostgreSQL', 'MySQL', 'Mongoose', 'Prisma', 'REST APIs'] },
-  { key: 'devops', note: 'ship & run', items: ['Docker', 'Linux', 'Vercel', 'Git', 'GitHub', 'CI/CD'] },
+  { key: 'data', note: 'storage & modelling', items: ['PostgreSQL', 'Postgres', 'MongoDB', 'MySQL', 'Mongoose', 'Prisma', 'REST APIs'] },
+  { key: 'devops', note: 'ship & run', items: ['CI/CD', 'Docker', 'Linux VM', 'AWS', 'GCP', 'DevOps', 'Vercel', 'Git', 'GitHub'] },
   { key: 'tooling', note: 'everyday glue', items: ['Stripe', 'JWT', 'Zod', 'React Hook Form', 'SEO'] },
 ];
 

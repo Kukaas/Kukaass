@@ -32,3 +32,14 @@ export const getExperience = cache(async (id: string): Promise<ExperienceType | 
   if (!doc) return null;
   return serialize<ExperienceType>(doc.toObject({ virtuals: true }));
 });
+
+export const getAllProjects = cache(async (): Promise<ProjectType[]> => {
+  try {
+    await dbConnect();
+    const docs = await Project.find({}).sort({ createdAt: -1 });
+    return serialize<ProjectType[]>(docs.map((d) => d.toObject({ virtuals: true })));
+  } catch (err) {
+    console.error('Error fetching all projects:', err);
+    return [];
+  }
+});

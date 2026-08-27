@@ -40,10 +40,9 @@ const SITE_NAME = "Kukaass";
 
 const PERSON_ID = `${SITE_URL}/#person`;
 
-// WebSite + Person structured data, in one @graph so the site and the person
-// behind it are linked rather than two unrelated nodes. Rendered server-side in
-// <head> so it stays stable and does not collide with client-injected
-// third-party scripts during hydration.
+// WebSite + Person + ProfilePage + BreadcrumbList structured data, in one @graph
+// so the site, profile, breadcrumb trail, and the person behind it are linked.
+// Rendered server-side in <head> for fast, deterministic search engine parsing.
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
@@ -51,16 +50,17 @@ const structuredData = {
       "@type": "WebSite",
       "@id": `${SITE_URL}/#website`,
       "name": SITE_NAME,
-      // Fallbacks Google may pick from if it declines the name above, most to
-      // least preferred. The bare host is last: Google documents a lowercase
-      // domain as the final backup.
       "alternateName": [
         "Chester Luke A. Maligaso",
+        "Chester Maligaso",
+        "Chester Luke Maligaso",
         "Chester Luke A. Maligaso Portfolio",
+        "Chester Maligaso Portfolio",
+        "Kukaass",
         "kukaass.app"
       ],
       "url": SITE_URL,
-      "description": "Portfolio of Chester Luke A. Maligaso (Kukaass), a Full-Stack Developer specializing in MERN stack, Laravel, React, Node.js, and modern web solutions.",
+      "description": "Portfolio of Chester Luke A. Maligaso (Chester Maligaso, Kukaass), a Full-Stack Developer specializing in MERN stack, Laravel, React, Next.js, Node.js, and modern web solutions.",
       "inLanguage": "en",
       "publisher": { "@id": PERSON_ID },
       "author": { "@id": PERSON_ID },
@@ -75,6 +75,52 @@ const structuredData = {
           "description": "Free high-precision 3D QR code generator. Transform links into interactive 3D WebGL dioramas and high-contrast scannable QR codes with Level H error correction.",
           "author": { "@id": PERSON_ID },
           "publisher": { "@id": PERSON_ID }
+        },
+        {
+          "@type": "WebApplication",
+          "name": "Nexora",
+          "alternateName": ["Barangay Libtangin Online Services", "nexora.kukaass.app"],
+          "url": "https://nexora.kukaass.app",
+          "applicationCategory": "GovernmentApplication, UtilityApplication",
+          "operatingSystem": "All",
+          "description": "Official online services portal of Barangay Libtangin, Gasan, Marinduque. Request clearances, certificates, permits, and verify documents with QR codes.",
+          "author": { "@id": PERSON_ID },
+          "publisher": { "@id": PERSON_ID }
+        }
+      ]
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": `${SITE_URL}/#profilepage`,
+      "url": SITE_URL,
+      "name": "Chester Luke A. Maligaso (Chester Maligaso) - Portfolio & Profile",
+      "isPartOf": { "@id": `${SITE_URL}/#website` },
+      "primaryImageOfPage": `${SITE_URL}/logo.jpeg`,
+      "breadcrumb": { "@id": `${SITE_URL}/#breadcrumb` },
+      "mainEntity": { "@id": PERSON_ID },
+      "description": "Official software engineering portfolio of Chester Luke A. Maligaso (Chester Maligaso, Kukaass) — Full-Stack Developer from the Philippines."
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${SITE_URL}/#breadcrumb`,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": `${SITE_URL}`
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Chester Luke Maligaso (Chester Maligaso)",
+          "item": `${SITE_URL}/#about`
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Projects",
+          "item": `${SITE_URL}/#projects`
         }
       ]
     },
@@ -82,11 +128,31 @@ const structuredData = {
       "@type": "Person",
       "@id": PERSON_ID,
       "name": "Chester Luke A. Maligaso",
-      "alternateName": ["Chester Maligaso", "Chester Luke", "Kukaass"],
+      "givenName": "Chester Luke",
+      "familyName": "Maligaso",
+      "additionalName": "A.",
+      "alternateName": [
+        "Chester Maligaso",
+        "Chester Luke Maligaso",
+        "Chester Luke",
+        "Maligaso",
+        "Kukaass",
+        "kukaassdev",
+        "itsmechester_"
+      ],
       "jobTitle": "Full-Stack Software Developer",
-      "description": "Full-Stack Developer specializing in MERN stack, Laravel, React, Node.js, and modern web solutions. Based in the Philippines.",
+      "description": "Full-Stack Developer specializing in MERN stack, Laravel, React, Next.js, Node.js, and modern web solutions. Based in the Philippines.",
       "url": SITE_URL,
       "image": `${SITE_URL}/logo.jpeg`,
+      "email": "mailto:maligaso.chesterlukea@gmail.com",
+      "nationality": {
+        "@type": "Country",
+        "name": "Philippines"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "PH"
+      },
       "sameAs": [
         "https://github.com/Kukaas",
         "https://www.linkedin.com/in/chester-luke-maligaso-812732359",
@@ -97,18 +163,29 @@ const structuredData = {
       "knowsAbout": [
         "Software Engineering",
         "Full-Stack Development",
-        "MERN Stack",
-        "Laravel",
+        "DevOps",
+        "CI/CD",
+        "Angular",
         "React",
+        "Next.js",
         "Node.js",
         "JavaScript",
         "TypeScript",
         "PHP",
+        "Laravel",
+        "PostgreSQL",
+        "Postgres",
         "MongoDB",
         "MySQL",
-        "Next.js",
+        "Amazon Web Services (AWS)",
+        "Google Cloud Platform (GCP)",
+        "Linux VM & Virtual Machines",
+        "Docker",
         "REST APIs",
-        "Database Design"
+        "Database Design",
+        "Tailwind CSS",
+        "WebGL",
+        "Three.js"
       ],
       "worksFor": {
         "@type": "Organization",
@@ -121,7 +198,7 @@ const structuredData = {
           "@type": "City",
           "name": "Manila"
         },
-        "skills": "React, Node.js, Laravel, MongoDB, SQL"
+        "skills": "React, Next.js, Angular, Node.js, Laravel, TypeScript, PostgreSQL, MongoDB, AWS, GCP, Docker, CI/CD"
       }
     },
     {
@@ -138,27 +215,34 @@ const structuredData = {
         {
           "@type": "SiteNavigationElement",
           "position": 2,
+          "name": "Nexora — Barangay Libtangin Portal",
+          "description": "Online public services portal for Barangay Libtangin, Gasan, Marinduque.",
+          "url": "https://nexora.kukaass.app"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 3,
           "name": "About",
           "description": "Full-Stack Developer background, technical journey, and software engineering philosophy.",
           "url": `${SITE_URL}/#about`
         },
         {
           "@type": "SiteNavigationElement",
-          "position": 3,
+          "position": 4,
           "name": "Projects",
           "description": "Selected software engineering projects, web applications, and systems built by Chester Luke Maligaso.",
           "url": `${SITE_URL}/#projects`
         },
         {
           "@type": "SiteNavigationElement",
-          "position": 4,
+          "position": 5,
           "name": "Experience",
           "description": "Professional software development roles, engineering experience, and career milestones.",
           "url": `${SITE_URL}/#experience`
         },
         {
           "@type": "SiteNavigationElement",
-          "position": 5,
+          "position": 6,
           "name": "Contact",
           "description": "Get in touch with Chester Luke Maligaso for full-stack software development projects and collaborations.",
           "url": `${SITE_URL}/#contact`
@@ -169,16 +253,33 @@ const structuredData = {
 };
 
 export const metadata: Metadata = {
-  title: "Chester Luke A. Maligaso (Kukaass) | Full-Stack Software Developer",
-  description: "Portfolio of Chester Luke A. Maligaso (Kukaass), a skilled Full-Stack Developer specializing in MERN stack, Laravel, React, Node.js, and modern web solutions.",
+  title: "Chester Luke A. Maligaso (Chester Maligaso) | Full-Stack Software Developer",
+  description: "Official portfolio of Chester Luke A. Maligaso (Chester Maligaso, Kukaass) — Full-Stack Software Developer specializing in Next.js, React, Node.js, MERN stack, Laravel, and modern web solutions.",
   keywords: [
     "Chester Luke A. Maligaso",
     "Chester Maligaso",
+    "Chester Luke Maligaso",
     "Chester Luke",
+    "Maligaso",
+    "Chester A. Maligaso",
+    "Chester Maligaso portfolio",
+    "Chester Maligaso developer",
+    "Chester Luke Maligaso developer",
+    "Maligaso developer",
     "Kukaass",
+    "kukaassdev",
     "Full-Stack Developer",
+    "DevOps Engineer",
     "Software Engineer",
     "Web Developer Philippines",
+    "CI/CD",
+    "Angular",
+    "Postgres",
+    "PostgreSQL",
+    "AWS",
+    "GCP",
+    "Linux VM",
+    "Docker",
     "MERN Stack Developer",
     "Laravel Developer",
     "React Developer",
@@ -193,11 +294,14 @@ export const metadata: Metadata = {
     "Software Development",
     "qrty",
     "qrty 3D QR generator",
-    "qwerty qr",
-    "qrty.kukaass.app"
+    "Nexora",
+    "Barangay Libtangin online"
   ],
-  authors: [{ name: "Chester Luke A. Maligaso" }],
-  creator: "Chester Luke A. Maligaso",
+  authors: [
+    { name: "Chester Luke A. Maligaso", url: SITE_URL },
+    { name: "Chester Maligaso", url: SITE_URL }
+  ],
+  creator: "Chester Luke A. Maligaso (Chester Maligaso)",
   publisher: "Chester Luke A. Maligaso",
   robots: {
     index: true,
@@ -211,12 +315,10 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Chester Luke A. Maligaso (Kukaass) | Full-Stack Software Developer",
-    description: "Explore the portfolio of Chester Luke A. Maligaso (Kukaass), a Full-Stack Developer specializing in building modern, scalable web applications.",
-    type: "website",
+    title: "Chester Luke A. Maligaso (Chester Maligaso) | Full-Stack Software Developer",
+    description: "Explore the portfolio of Chester Luke Maligaso (Chester Maligaso, Kukaass), a Full-Stack Developer specializing in building modern, scalable web applications.",
+    type: "profile",
     locale: "en_US",
-    // Google's second-choice source for the site name, after the WebSite
-    // JSON-LD. Must match it, or the two signals compete and neither wins.
     siteName: SITE_NAME,
     url: SITE_URL,
     images: [
@@ -224,14 +326,14 @@ export const metadata: Metadata = {
         url: "/logo.jpeg",
         width: 1200,
         height: 630,
-        alt: "Chester Luke A. Maligaso Portfolio",
+        alt: "Chester Luke A. Maligaso (Chester Maligaso) Portfolio",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Chester Luke A. Maligaso (Kukaass) | Full-Stack Software Developer",
-    description: "Full-Stack Developer specializing in MERN stack, Laravel, and React. View my projects and skills.",
+    title: "Chester Luke A. Maligaso (Chester Maligaso) | Full-Stack Developer",
+    description: "Full-Stack Developer specializing in MERN stack, Laravel, Next.js, and React. View my projects and skills.",
     images: ["/logo.jpeg"],
   },
   verification: {
